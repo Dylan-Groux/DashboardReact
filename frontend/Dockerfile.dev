@@ -1,0 +1,16 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Installe les deps d'abord (cache Docker efficace)
+COPY package*.json ./
+RUN npm install
+
+# Copie le reste
+COPY . .
+
+# Expose le port Vite
+EXPOSE 5173
+
+# Démarre le serveur Vite
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
