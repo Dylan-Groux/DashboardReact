@@ -1,6 +1,6 @@
 import React from 'react'
 import './LoginPage.css'
-import logo from '../../../assets/images/login/Logo.png'
+import logo from '../../../assets/icons/logo.png'
 import LoginForm from '../LoginForm/LoginForm';
 
 
