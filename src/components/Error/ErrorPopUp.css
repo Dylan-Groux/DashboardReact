@@ -1,0 +1,68 @@
+
+.error-popup-container {
+    position: absolute;
+    top: 8%;
+    left: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 1000;
+}
+
+.error {
+    background: #ffeaea;
+    color: #d32f2f;
+    border: 1px solid #f5c2c7;
+    border-end-end-radius: 8px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-family: "Inter", sans-serif;
+    box-shadow: 0 2px 8px rgba(211,47,47,0.08);
+    animation: fadeInX 0.8s cubic-bezier(.4,0,.2,1), fadeOutX 0.8s cubic-bezier(.4,0,.2,1) 5s;
+    margin-bottom: 0;
+}
+
+.error::before {
+    content: "Oups !";
+    font-size: 15px;
+    margin-right: 4px;
+}
+
+@keyframes fadeInX {
+    0% { opacity: 0; transform: translateX(-30px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeOutX {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(-30px); }
+}
+
+.error-progress {
+    width: 80%;
+    height: 4px;
+    opacity: 0;
+    background-color: #d32f2f;
+    border-radius: 0 0 8px 8px;
+    transform-origin: right;
+    /* Apparition douce après 0.7s, puis écoulement */
+    animation:
+      fadeInBar 0.5s ease-in 0.7s forwards,
+      shrinkWidth 5s linear 0.7s forwards,
+      fadeOutBarX 0.8s cubic-bezier(.4,0,.2,1) 5s;
+}
+
+@keyframes fadeInBar {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes shrinkWidth {
+    0% { width: 100%; }
+    100% { width: 0; }
+}
+
+@keyframes fadeOutBarX {
+    0% { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(-30px); }
+}

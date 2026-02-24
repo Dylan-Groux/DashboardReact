@@ -1,6 +1,6 @@
 import React from 'react';
 import Footer from '../components/Footer/Footer';
-import LoginPage from '../components/LoginPage/LoginPage';
+import LoginPage from '../components/Login/LoginPage/LoginPage';
 
 const Login: React.FC = () => {
   return (

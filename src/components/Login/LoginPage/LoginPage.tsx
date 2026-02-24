@@ -1,26 +1,18 @@
 import React from 'react'
 import './LoginPage.css'
-import logo from '../../assets/images/login/logo.png'
+import logo from '../../../assets/images/login/Logo.png'
+import LoginForm from '../LoginForm/LoginForm';
+
 
 const LoginPage: React.FC = () => {
   return (
     <div className='login-page'>
       <section className='left-section'>
-          <img src={logo} alt="Logo" className='logo' />
+        <img src={logo} alt="Logo" className='logo' />
         <div className='form-section'>
           <h1>Transformez <br />vos stats en résultats</h1>
           <h2>Se connecter</h2>
-          <form className='login-form'>
-            <div className="form-group">
-              <h3>Email</h3>
-              <input type="email" required />
-            </div>
-            <div className="form-group">
-              <h3>Mot de passe</h3>
-              <input type="password" required />
-            </div>
-            <button type="submit">Se connecter</button>
-          </form>
+          <LoginForm />
           <a href="/forgot-password" className='forgot-password-link'>Mot de passe oublié ?</a>
         </div>
       </section>
@@ -30,7 +22,7 @@ const LoginPage: React.FC = () => {
         </span>
       </section>
     </div>
-  )
+  );
 }
 
 export default LoginPage
