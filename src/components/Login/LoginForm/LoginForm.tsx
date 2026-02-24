@@ -9,7 +9,7 @@ const LoginForm = () => {
     return (
         <form className='login-form' onSubmit={handleSubmit}>
             <div className="form-group">
-                <h3>Email</h3>
+                <h3>Adresse email</h3>
                 <input
                 type="text"
                 required
