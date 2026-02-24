@@ -1,6 +1,7 @@
 body, html {
   overflow-y: hidden;
   min-height: 100vh;
+  background-color: #F2F3FF;
 }
 
 .dashboard-wrapper {
