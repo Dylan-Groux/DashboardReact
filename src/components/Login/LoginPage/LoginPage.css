@@ -94,7 +94,7 @@
     margin-right: 22px;
 }
 
-.info-bulle h4 {
+.info-bulle span {
     font-family: "Inter", sans-serif;
     font-weight: 400;
     font-style: Regular;
@@ -103,4 +103,17 @@
     letter-spacing: 0px;
     text-align: center;
     color: #0B23F4;
+}
+
+/* Accessibilité W3C */
+/** Classe pour masquer visuellement les éléments tout en les rendant accessibles aux lecteurs d'écran pour garder la logique de la Section droite et gauche*/
+.W3C-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

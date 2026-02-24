@@ -17,8 +17,9 @@ const LoginPage: React.FC = () => {
         </div>
       </section>
       <section className='right-section'>
+        <h2 className='W3C-visually-hidden'>Image et informations</h2>
         <span className='info-bulle'>
-          <h4>Analysez vos performances en un clin d'oeil, suivez vos progrès et atteignez vos objectifs.</h4>
+          <span>Analysez vos performances en un clin d'oeil, suivez vos progrès et atteignez vos objectifs.</span>
         </span>
       </section>
     </div>
