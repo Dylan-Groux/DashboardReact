@@ -1,5 +1,4 @@
 header {
-    background-color: #ffffff;
     padding: 10px 8%;
 }
 
@@ -11,10 +10,12 @@ header {
 }
 
 .navbar ul {
+    background-color: white;
+    border-radius: 40px;
     list-style: none;
     display: flex;
     margin: 0;
-    padding: 0;
+    padding: 14px 20px;
 }
 
 .navbar li {
@@ -37,5 +38,6 @@ header {
 }
 
 .logout {
+    margin-right: 20px;
     color: #0B23F4;
 }
