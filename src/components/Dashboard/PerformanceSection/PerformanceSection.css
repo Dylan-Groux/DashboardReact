@@ -1,0 +1,93 @@
+body, html {
+    overflow-y: auto;
+}
+
+.performance-cards {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 20px;
+}
+
+.performance-section {
+    padding: 20px;
+    margin-left: 12%;
+    margin-right: 12%;
+    margin-top: 7%;
+}
+
+.performance-section h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-style: Medium;
+    font-size: 22px;
+    line-height: 100%;
+    letter-spacing: 0px;
+    color: #111111;
+}
+
+.performance-card {
+    padding: 30px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+}
+
+.header-performance-card {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-areas:
+        "title select"
+        "desc desc";
+    align-items: center;
+}
+
+.header-performance-card h3 {
+    grid-area: title;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-style: Medium;
+    font-size: 22px;
+    line-height: 100%;
+    letter-spacing: 0px;
+    color: #0B23F4;
+}
+.header-performance-card select {
+    grid-area: select;
+}
+.header-performance-card p {
+    grid-area: desc;
+    margin-top: -10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0px;
+    color: #707070;
+}
+
+.chart {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+}
+
+/* Legend styles */
+.chart-legend {
+    display: flex;
+    align-items: start;
+    margin-top: -10px;
+}
+
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  background-color: #7987FF;
+}
+
+.legend-text {
+  font-size: 12px;
+  color: #707070;
+}
