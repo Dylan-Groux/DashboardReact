@@ -1,4 +1,6 @@
-import { Bar, BarChart, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, Tooltip, XAxis, YAxis } from 'recharts';
+import CustomTooltip from './ToolTips';
+import { useState } from 'react';
 
 export interface ChartPerformanceProps {
     data: {name: string; uv: number}[];
@@ -7,7 +9,6 @@ export interface ChartPerformanceProps {
 }
 
 const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
-
     const xAndYColor = '#707070';
     const lineColor = '#B6BDFC';
     const xAndYFontStyle = {
@@ -35,8 +36,17 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
     const chartHeight = 307;
     const xTickStyle = { ...xAndYFontStyle, dy: 18 };
 
+    const [isHovered, setIsHovered] = useState(false);
+    const barColor = isHovered ? '#2D5BFF' : lineColor;
+
     return (
-      <div style={{ position: 'relative', width: chartWidth, height: chartHeight }}>
+      <div 
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        style={{ position: 'relative', 
+        width: chartWidth, 
+        height: chartHeight }}
+      >
         {/* Faux axe Y HTML/CSS aligné avec le chart principal */}
         <div
           style={{
@@ -107,7 +117,18 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
             padding={{ bottom: 1 }} 
             axisLine={{ stroke: lineColor, strokeWidth: 2, dx: -10 }}
           />
-          <Bar dataKey="uv" fill={lineColor} radius={[30, 30, 30, 30]} barSize={14} />
+          <Bar 
+            dataKey="uv" 
+            fill={barColor} 
+            radius={[30, 30, 30, 30]} 
+            barSize={14} 
+            activeBar={false}
+          />
+           <Tooltip 
+           /** Opération ternaire pour afficher le tooltip uniquement lorsque la souris survole le chart */
+            content={ isHovered ? CustomTooltip : <div style={{ display: 'none' }} /> }
+            active={true}
+          />
         </BarChart>
       </div>
     );
