@@ -1,9 +1,6 @@
-
-// Plus besoin de UserPicture ici, on va juste typer la réponse API
-
 /**
  * @returns URL de l'image de l'utilisateur
- * Permet de renvoyer l'URL de l'image de l'utilisateur.
+ * Permet de récupérer l'URL de l'image de l'utilisateur.
  */
 
 export async function getUserPicture(): Promise<string> {
@@ -30,6 +27,7 @@ export async function getUserPicture(): Promise<string> {
     }
 
     if (!response.ok) {
+        console.error('[getUserPicture] Erreur lors de la récupération des données:', response.status, response.statusText);
         throw new Error('Erreur lors de la récupération des données');
     }
 
@@ -38,11 +36,13 @@ export async function getUserPicture(): Promise<string> {
     try {
         data = await response.json();
     } catch (err) {
+        console.error('[getUserPicture] Erreur lors de la conversion de la réponse en JSON:', err);
         throw err;
     }
 
     const profilePicture = data?.profile?.profilePicture;
     if (!profilePicture || typeof profilePicture !== 'string') {
+        console.error('[getUserPicture] Données reçues dans un format inattendu:', data);
         throw new Error('Données reçues dans un format inattendu');
     }
 
