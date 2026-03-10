@@ -1,4 +1,5 @@
-import { mapUserActivity, type UserActivityRaw } from "@api/Mapping/UserActivity";
+import { mapUserActivity } from "@api/Mapping/UserActivity";
+import type { UserActivityRawKm } from "@api/Mapping/types/UserActivityTypes";
 
 /**
  * @type {ListeOfUserActivityKilometres}
@@ -6,8 +7,8 @@ import { mapUserActivity, type UserActivityRaw } from "@api/Mapping/UserActivity
  * Chaque objet de la liste contient un nom (ex: "S1" pour semaine 1) et une valeur uv représentant les kilomètres totaux pour cette période.
  */
 export type ListeOfUserActivityKilometres = { 
-    name: string, 
-    uv: number 
+    name: string;
+    uv?: number;
 }[];
 
 /**
@@ -33,7 +34,7 @@ export async function fetchChartKilometres(
     if (!response.ok) {
         throw new Error('Erreur lors de la récupération des données');
     }
-    const data: UserActivityRaw[] = await response.json();
+    const data: UserActivityRawKm[] = await response.json();
     if (!Array.isArray(data)) {
         throw new Error('Données reçues dans un format inattendu');
     } else if (data.length > 0 && typeof data[0].date === 'undefined') {
