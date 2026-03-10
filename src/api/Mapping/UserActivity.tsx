@@ -1,65 +1,47 @@
-// Types TypeScript pour garantir la cohérence des données à travers l'application
-// Gestion des erreurs et des cas où
 //TODO : Test unitaire de la fonction de mapping avec des données simulées pour s'assurer qu'elle fonctionne correctement avant de l'intégrer dans les composants
+import type { UserActivityMapped } from "./types/UserActivityTypes";
+import type { UserActivityRawKm, UserActivityRawHR } from "./types/UserActivityTypes";
+import { mapKilometres } from "./strategies/km/MapKilometres";
+import { mapHeartRate } from "./strategies/bpm/MapHeartRate";
 
-type MappingStrategy = (data: UserActivityRaw[], startDate: Date, endDate: Date) => UserActivityMapped[];
+type MappingStrategy<T, R>= (data: T[], startDate: Date, endDate: Date) => R[];
 
-const strategies: Record<string, MappingStrategy> = {
-    kilometres: mapKilometres,
-}
-
-export interface UserActivityRaw {
-    date: string; // Date de l'activité au format ISO
-    distance: number; // Distance parcourue en kilomètres
-}
-
-export interface UserActivityMapped {
-    name: string; // Nom de la période (ex: "S1" pour semaine 1)
-    uv: number; // Valeur totale des kilomètres pour cette période
+const strategies = {
+    kilometres: mapKilometres as MappingStrategy<UserActivityRawKm, UserActivityMapped>,
+    bpm: mapHeartRate as MappingStrategy<UserActivityRawHR, UserActivityMapped>,
 }
 
 /**
- * @param date 
- * @returns Date normalisée à 00:00:00 pour faciliter les comparaisons de dates sans tenir compte de l'heure.
- * Utile pour le mapping des activités utilisateur
+ * Mappe les données d'activité utilisateur brutes en fonction du type spécifié (kilomètres ou BPM) et des dates de début et de fin.
+ * 
+ * @param type Le type de données à mapper.
+ * @param data Les données brutes de l'utilisateur.
+ * @param startDate La date de début pour le filtrage des données.
+ * @param endDate La date de fin pour le filtrage des données.
+ * @return Un tableau d'activités mappées.
+ * @throws Error si aucune stratégie de mapping n'est trouvée pour le type spécifié.
+ * 
+ * @example
+ * const result = mapUserActivity('kilometres', rawKmData, new Date('2024-01-01'), new Date('2024-01-31'));
  */
-export function normalizeDate(date: Date): Date {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    return d;
-}
-
-export function mapUserActivity(type: string, data: UserActivityRaw[], startDate: Date, endDate: Date): UserActivityMapped[] {
-    const strategy = strategies[type];
+export function mapUserActivity<T extends 'kilometres' | 'bpm',>(
+    type: T,
+    data: 
+        T extends 'kilometres' ? UserActivityRawKm[] : 
+        T extends 'bpm' ? UserActivityRawHR[] : 
+        // Ajout d'un cas si nécessaire ici.
+        never,
+    startDate: Date,
+    endDate: Date
+): UserActivityMapped[] {
+    const strategy = strategies[type] as MappingStrategy<
+        T extends 'kilometres' ? UserActivityRawKm : 
+        T extends 'bpm' ? UserActivityRawHR : 
+        never,
+        UserActivityMapped
+    >;
     if (!strategy) {
         throw new Error(`No mapping strategy found for type: ${type}`);
     }
-    return strategy(data, startDate, endDate);
-}
-
-export function mapKilometres(data: UserActivityRaw[], startDate: Date, endDate: Date): UserActivityMapped[] {
-    const weeks = [];
-    let weekStart = new Date(startDate);
-    while(weekStart <= endDate) {
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekEnd.getDate() + 6);
-        if (weekEnd > endDate) weekEnd.setTime(endDate.getTime());
-        weeks.push({ start: new Date(weekStart), end: new Date(weekEnd) });
-        weekStart.setDate(weekStart.getDate() + 7);
-    }
-
-    return weeks.map((week, idx) => {
-        const weekActivities = data.filter((item: UserActivityRaw) => {
-            const d = normalizeDate(new Date(item.date));
-            const start = normalizeDate(week.start);
-            const end = normalizeDate(week.end);
-            return d >= start && d <= end;
-        });
-
-    const totalKm = weekActivities.reduce((sum: number, item: UserActivityRaw) => sum + (typeof item.distance === 'number' ? item.distance : 0), 0);
-        return {
-            name: `S${idx + 1}`,
-            uv: Number(totalKm.toFixed(2)),
-        };
-    });
+    return strategy(data as any, startDate, endDate);
 }
