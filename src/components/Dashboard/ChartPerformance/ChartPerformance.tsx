@@ -10,6 +10,7 @@ export interface ChartPerformanceProps {
 
 const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
     const xAndYColor = '#707070';
+    const AxisColor = '#717171';
     const lineColor = '#B6BDFC';
     const xAndYFontStyle = {
       fill: xAndYColor,
@@ -21,6 +22,8 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
       letterSpacing: 0,
       textAlign: 'center',
     };
+
+    const EmptyTooltip = () => <div style={{ display: 'none' }} />;
 
     const step = 10; // Intervalle de 10 km
     const maxValue = Math.max(...data.map(d => d.uv));
@@ -35,6 +38,7 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
     const chartWidth = 340;
     const chartHeight = 307;
     const xTickStyle = { ...xAndYFontStyle, dy: 18 };
+    const pointTick = [5,15];
 
     const [isHovered, setIsHovered] = useState(false);
     const barColor = isHovered ? '#2D5BFF' : lineColor;
@@ -51,7 +55,7 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
         <div
           style={{
             position: 'absolute',
-            left: 0,
+            left: 15,
             top: 20, // ajuste pour surélever
             display: 'flex',
             flexDirection: 'column',
@@ -80,17 +84,40 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
             </span>
           ))}
         </div>
+        <div style={{
+          position: 'absolute',
+          left: 40,
+          top: 50,
+          width: '85%',
+          height: chartHeight - 80,
+          zIndex: 0, // derrière le chart
+          pointerEvents: 'none',
+        }}>
+          {pointTick.map((val, idx) => (
+            <div
+              key={val}
+              style={{
+                position: 'absolute',
+                top: `${(1 - idx / (pointTick.length - 1)) * 50}%`,
+                left: 0,
+                width: '100%',
+                borderTop: '1px dashed #F1F1F1',
+                opacity: 0.7,
+              }}
+            />
+          ))}
+        </div>
         {/* Chart pour l'axe X visuel */}
         <BarChart
           width={visualWidth}
           height={chartHeight}
           data={[]}
           margin={{ left: 0, right: 0, top: 20, bottom: 20 }}
-          style={{ position: 'absolute', top: 0, left: 30, pointerEvents: 'none', zIndex: 1 }}
+          style={{ position: 'absolute', top: 0, left: 32, pointerEvents: 'none', zIndex: 1 }}
         >
             <XAxis
                 dataKey="name"
-                axisLine={{ stroke: lineColor, strokeWidth: 2, dy: 18}}
+                axisLine={{ stroke: AxisColor, strokeWidth: 1, dy: 18}}
                 tickLine={false}
                 ticks={[]}
             />
@@ -115,7 +142,7 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
             domain={[0, 'dataMax']} 
             ticks={ticks} 
             padding={{ bottom: 1 }} 
-            axisLine={{ stroke: lineColor, strokeWidth: 2, dx: -10 }}
+            axisLine={{ stroke: AxisColor, strokeWidth: 1, dx: -10 }}
           />
           <Bar 
             dataKey="uv" 
@@ -126,7 +153,7 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
           />
            <Tooltip 
            /** Opération ternaire pour afficher le tooltip uniquement lorsque la souris survole le chart */
-            content={ isHovered ? CustomTooltip : <div style={{ display: 'none' }} /> }
+            content={ isHovered ? CustomTooltip : <EmptyTooltip /> }
             active={true}
           />
         </BarChart>
