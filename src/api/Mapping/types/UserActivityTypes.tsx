@@ -1,9 +1,9 @@
-export interface UserActivityRawKm { 
+export type UserActivityRawKm = { 
     date: string;  
     distance: number; 
 }
 
-export interface UserActivityRawHR { 
+export type UserActivityRawHR = { 
     date: string;  
     heartRate: { min: number; max: number; average: number }; 
 }
@@ -16,7 +16,7 @@ export type HeartRateArray =
 }[];
 
 
-export interface UserActivityMapped {
+export type UserActivity = {
     name : string;
     uv?: number;
     pointsaveragebpm?: number | null;

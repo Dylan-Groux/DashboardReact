@@ -1,5 +1,5 @@
 //TODO : Test unitaire de la fonction de mapping avec des données simulées pour s'assurer qu'elle fonctionne correctement avant de l'intégrer dans les composants
-import type { UserActivityMapped } from "./types/UserActivityTypes";
+import type { UserActivity } from "./types/UserActivityTypes";
 import type { UserActivityRawKm, UserActivityRawHR } from "./types/UserActivityTypes";
 import { mapKilometres } from "./strategies/km/MapKilometres";
 import { mapHeartRate } from "./strategies/bpm/MapHeartRate";
@@ -7,8 +7,8 @@ import { mapHeartRate } from "./strategies/bpm/MapHeartRate";
 type MappingStrategy<T, R>= (data: T[], startDate: Date, endDate: Date) => R[];
 
 const strategies = {
-    kilometres: mapKilometres as MappingStrategy<UserActivityRawKm, UserActivityMapped>,
-    bpm: mapHeartRate as MappingStrategy<UserActivityRawHR, UserActivityMapped>,
+    kilometres: mapKilometres as MappingStrategy<UserActivityRawKm, UserActivity>,
+    bpm: mapHeartRate as MappingStrategy<UserActivityRawHR, UserActivity>,
 }
 
 /**
@@ -33,12 +33,12 @@ export function mapUserActivity<T extends 'kilometres' | 'bpm',>(
         never,
     startDate: Date,
     endDate: Date
-): UserActivityMapped[] {
+): UserActivity[] {
     const strategy = strategies[type] as MappingStrategy<
         T extends 'kilometres' ? UserActivityRawKm : 
         T extends 'bpm' ? UserActivityRawHR : 
         never,
-        UserActivityMapped
+        UserActivity
     >;
     if (!strategy) {
         throw new Error(`No mapping strategy found for type: ${type}`);
