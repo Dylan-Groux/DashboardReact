@@ -1,8 +1,8 @@
 import type { UserActivityRawHR} from "../../types/UserActivityTypes";
 import { normalizeDate } from "../../../../utils/NormalizeDate";
-import type { UserActivityMapped, HeartRateArray } from "../../types/UserActivityTypes";
+import type { UserActivity, HeartRateArray } from "../../types/UserActivityTypes";
 
-export function mapHeartRate(data: UserActivityRawHR[], startDate: Date, endDate: Date): UserActivityMapped[] {
+export function mapHeartRate(data: UserActivityRawHR[], startDate: Date, endDate: Date): UserActivity[] {
     const days = [];
     let dayStart = new Date(startDate);
     let firstMonday = new Date(startDate);
@@ -58,8 +58,8 @@ export function mapHeartRate(data: UserActivityRawHR[], startDate: Date, endDate
         return {
             name: daylibelle[idx % 7],
             pointsaveragebpm: averageBpm ?? 0,
-            minbpm: minBpm ?? 0,
-            maxbpm: maxBpm ?? 0,
+            minbpm: minBpm && minBpm > 110 ? minBpm : null,
+            maxbpm: maxBpm && maxBpm > 110 ? maxBpm : null,
         };
     });
 }
