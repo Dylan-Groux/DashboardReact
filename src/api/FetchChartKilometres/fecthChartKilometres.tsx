@@ -19,13 +19,13 @@ export type ListeOfUserActivityKilometres = {
  */
 export async function fetchChartKilometres(
     startDate: Date, 
-    endDate: Date
+    endDate: Date,
+    token: string
 ): Promise<ListeOfUserActivityKilometres> {
     const apiUrl = import.meta.env.VITE_API_URL;
     if (!apiUrl) {
         throw new Error('L\'URL de l\'API n\'est pas définie dans les variables d\'environnement');
     }
-    const token = localStorage.getItem('token');
     const response = await fetch(`${apiUrl}/user-activity?startWeek=${startDate.toISOString()}&endWeek=${endDate.toISOString()}`, {
         headers: {
             'Authorization': `Bearer ${token}`,
