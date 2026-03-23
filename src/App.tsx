@@ -6,28 +6,31 @@ import Logout from './Logout/Logout';
 import { AuthProvider } from './context/AuthContext';
 import { UserProvider } from './context/UserContext';
 import RequireAuth from './context/RequireAuth';
+import { ApiUrlContext } from './context/ApiUrlContext';
 
 function App() {
   return (
-    <AuthProvider>
-      <UserProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route element={<RequireAuth><Outlet /></RequireAuth>}>
-            <Route path="/dashboard/:id" element={<Dashboard />} />
-            <Route path="/profil/:id" element={"TODO : En dev"} />
-            {/* Route à certainement rajouter même si non présent dans la maquette */}
-            <Route path="/register" element={"TODO : Register"} />
-            <Route path="/forgot-password" element={"TODO : Mot de passe oublié"} />
-            <Route path="/terms" element={"TODO : CGU"} />
-            <Route path="/contact" element={"TODO : Contact"} />
-            <Route path="/logout" element={<Logout />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </UserProvider>
-    </AuthProvider>
+    <ApiUrlContext.Provider value={import.meta.env.VITE_API_URL}>
+      <AuthProvider>
+        <UserProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route element={<RequireAuth><Outlet /></RequireAuth>}>
+              <Route path="/dashboard/:id" element={<Dashboard />} />
+              <Route path="/profil/:id" element={"TODO : En dev"} />
+              {/* Route à certainement rajouter même si non présent dans la maquette */}
+              <Route path="/register" element={"TODO : Register"} />
+              <Route path="/forgot-password" element={"TODO : Mot de passe oublié"} />
+              <Route path="/terms" element={"TODO : CGU"} />
+              <Route path="/contact" element={"TODO : Contact"} />
+              <Route path="/logout" element={<Logout />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </UserProvider>
+      </AuthProvider>
+    </ApiUrlContext.Provider>
   );
 }
 

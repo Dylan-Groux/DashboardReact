@@ -15,7 +15,7 @@ const DashboardPage: React.FC = () => {
         <img
           className='user-image'
           src={userPicture || defaultProfilePicture}
-          alt="Sophie"
+          alt={userName || 'Utilisateur'}
         />
         <div className='user-member-name'>
           <h1>{userName || 'Utilisateur'}</h1>
