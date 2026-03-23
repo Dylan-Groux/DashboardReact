@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './PerformanceSection.css'
 import DateNavigator from '../DateNavigator/DateNavigator'
 import ChartPerformance from '../ChartPerformance/ChartPerformance';
-import { fetchChartKilometres } from '@api/FetchChartKilometres/fecthChartKilometres';
+import { fetchChartKilometres } from '@api/FetchChartKilometres/FecthChartKilometres';
 import ChartBPM from '../ChartBPM/ChartBPM';
 import { fetchChartBPM } from '@api/FetchChartBPM/FetchChartBPM';
 
