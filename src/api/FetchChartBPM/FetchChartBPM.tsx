@@ -21,13 +21,13 @@ export type ListeOfUserActivityBPM = {
  */
 export async function fetchChartBPM(
     startDateBPM: Date, 
-    endDateBPM: Date
+    endDateBPM: Date,
+    token: string
 ): Promise<ListeOfUserActivityBPM> {
     const apiUrl = import.meta.env.VITE_API_URL;
     if (!apiUrl) {
         throw new Error('L\'URL de l\'API n\'est pas définie dans les variables d\'environnement');
     }
-    const token = localStorage.getItem('token');
     const response = await fetch(`${apiUrl}/user-activity?startWeek=${startDateBPM.toISOString()}&endWeek=${endDateBPM.toISOString()}`, {
         headers: {
             'Authorization': `Bearer ${token}`,

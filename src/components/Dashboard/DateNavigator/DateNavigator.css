@@ -6,14 +6,15 @@
 }
 
 .date-navigator button {
-  background: none;
-  border: none;
   font-size: 14px;
   cursor: pointer;
   padding: 1px 5px;
-  color: #333;
-  border: 1px solid;
   border-radius: 8px;
+}
+
+.active {
+  background: none;
+  border: 1px solid #333;
 }
 
 .date-navigator span {
@@ -28,6 +29,9 @@
 }
 
 .disabled {
-  opacity: 0.5;
+  opacity: 1;
+  color: white;
+  background-color: #5465F7;
   cursor: not-allowed;
+  border: 1px solid #333;
 }

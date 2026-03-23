@@ -1,6 +1,6 @@
 import type { UserActivityRawKm} from "../../types/UserActivityTypes";
 import { normalizeDate } from "../../../../utils/NormalizeDate";
-import type { UserActivityMapped } from "../../types/UserActivityTypes";
+import type { UserActivity } from "../../types/UserActivityTypes";
 /**
  * 
  * @param data 
@@ -8,7 +8,7 @@ import type { UserActivityMapped } from "../../types/UserActivityTypes";
  * @param endDate 
  * @returns Liste des kilomètres mapper par semaine.
  */
-export function mapKilometres(data: UserActivityRawKm[], startDate: Date, endDate: Date): UserActivityMapped[] {
+export function mapKilometres(data: UserActivityRawKm[], startDate: Date, endDate: Date): UserActivity[] {
     const weeks = [];
     let weekStart = new Date(startDate);
     while(weekStart <= endDate) {

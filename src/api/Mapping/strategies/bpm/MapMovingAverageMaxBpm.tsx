@@ -1,7 +1,7 @@
-import type { UserActivityMapped } from "../../types/UserActivityTypes";
+import type { UserActivity } from "../../types/UserActivityTypes";
 
 
-export function addMovingAverageMaxBpm(data: UserActivityMapped[], windowSize: number): UserActivityMapped[] {
+export function addMovingAverageMaxBpm(data: UserActivity[], windowSize: number): UserActivity[] {
   return data.map((_, idx, arr) => {
     const start = Math.max(0, idx - windowSize + 1);
     const window = arr.slice(start, idx + 1);

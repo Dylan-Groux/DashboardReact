@@ -5,12 +5,22 @@ import ChartPerformance from '../ChartPerformance/ChartPerformance';
 import { fetchChartKilometres } from '@api/FetchChartKilometres/FecthChartKilometres';
 import ChartBPM from '../ChartBPM/ChartBPM';
 import { fetchChartBPM } from '@api/FetchChartBPM/FetchChartBPM';
+import { useAuth } from '../../../context/AuthContext';
 
 const PerformanceSection: React.FC = () => {
-    const [startDate, setStartDate] = useState(new Date());
     const periodLength = 28;
-    const [startDateBPM, setStartDateBPM] = useState(new Date());
     const periodLengthBPM = 6;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const initialStartDateKm = new Date(today);
+    initialStartDateKm.setDate(today.getDate() - periodLength);
+
+    const initialStartDateBPM = new Date(today);
+    initialStartDateBPM.setDate(today.getDate() - periodLengthBPM);
+
+    const [startDate, setStartDate] = useState(initialStartDateKm);
+    const [startDateBPM, setStartDateBPM] = useState(initialStartDateBPM);
     const endDate = new Date(startDate.getTime() + (periodLength - 1) * 24 * 60 * 60 * 1000);
     const endDateBPM = new Date(startDateBPM.getTime() + (periodLengthBPM - 1) * 24 * 60 * 60 * 1000);
     const [ChartData, setChartData] = useState<{ name: string; uv: number }[]>([]);
@@ -19,11 +29,16 @@ const PerformanceSection: React.FC = () => {
     const moyenneKm = ChartData.length > 0 ? Math.ceil(totalKm / ChartData.length) : 0;
     const bpmValues = ChartBPMData.map(item => item.pointsaveragebpm).filter(v => v !== null && v !== undefined && v !== 0);
     const averageBpm = bpmValues.length > 0 ? Math.ceil(bpmValues.reduce((sum, v) => sum + v, 0) / bpmValues.length) : 0;
+    const { token } = useAuth();
+    if (!token) {
+        return null;
+    }
 
     useEffect(() => {
     fetchChartKilometres(
         startDate,
-        endDate
+        endDate,
+        token
         )
             .then(data => {
                 setChartData(
@@ -39,7 +54,9 @@ const PerformanceSection: React.FC = () => {
     useEffect(() => {
         fetchChartBPM(
             startDateBPM,
-            endDateBPM)
+            endDateBPM,
+            token
+            )
             .then(data => {
                 setChartBPMData(
                     data.map(item => ({

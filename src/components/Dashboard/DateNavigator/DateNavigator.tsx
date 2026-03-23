@@ -46,6 +46,7 @@ const DateNavigator: React.FC<DateNavigatorProps> = ({
         <div className='date-navigator'>
             <button
                 onClick={handlePrevious}
+                className='active'
             >
                 &lt;
             </button>
@@ -55,7 +56,7 @@ const DateNavigator: React.FC<DateNavigatorProps> = ({
             <button
                 onClick={handleNext}
                 disabled={isNextDisabled}
-                className={isNextDisabled ? 'disabled' : ''}
+                className={isNextDisabled ? 'disabled' : 'active'}
             >
                 &gt;
             </button>
