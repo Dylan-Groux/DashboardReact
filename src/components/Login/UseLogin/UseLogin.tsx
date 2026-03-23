@@ -1,10 +1,11 @@
   import React, { useState } from 'react';
+  import { useNavigate } from 'react-router-dom';
 
-export const useLogin = () => {
-
+export const useLogin = (login: (username: string, password: string) => void) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     const sanitizedData = sanitizeFormData({ username: email, password });
@@ -18,9 +19,8 @@ export const useLogin = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        localStorage.setItem('token', data.token);
-        // Rediriger ou afficher un message de succès ici
-        window.location.href = `/dashboard/${data.userId}`;
+        login(email, password); // Met à jour le contexte d'authentification
+        navigate(`/dashboard/${data.userId}`); // Redirige vers le dashboard
       } else {
         setError('Erreur de connexion');
       }
