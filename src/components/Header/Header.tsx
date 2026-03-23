@@ -1,19 +1,21 @@
 import React from 'react';
 import logo from '../../assets/icons/logo.png'
 import './Header.css'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
   return (
     <header>
       <nav className='navbar'>
         <img src={logo} alt="Logo" />
         <ul>
-          <li><a href={`/dashboard/${id}`}>Dashboard</a></li>
-          <li><a href={`/profil/${id}`}>Mon Profil</a></li>
+          <li><a onClick={() => navigate(`/dashboard/${id}`)}>Dashboard</a></li>
+          <li><a onClick={() => navigate(`/profil/${id}`)}>Mon Profil</a></li>
           <li> | </li>
-          <li><a href="/logout" className='logout'>Se déconnecter</a></li>
+          <li><a onClick={() => navigate('/logout')} className='logout'>Se déconnecter</a></li>
         </ul>
       </nav>
     </header>
