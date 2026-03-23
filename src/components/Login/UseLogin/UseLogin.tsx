@@ -1,29 +1,37 @@
-  import React, { useState } from 'react';
+  import React, { useContext, useState } from 'react';
   import { useNavigate } from 'react-router-dom';
+import { ApiUrlContext } from '../../../context/ApiUrlContext';
+import { useAuth } from '../../../context/AuthContext';
+import { loginUser } from '@api/LoginUser';
 
-export const useLogin = (login: (username: string, password: string) => void) => {
+export const useLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const apiUrl = useContext(ApiUrlContext);
+  const { setAuthSession } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    const sanitizedData = sanitizeFormData({ username: email, password });
     e.preventDefault();
     setError('');
+
     try {
-      const response = await fetch('http://localhost:8000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sanitizedData),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        login(email, password); // Met à jour le contexte d'authentification
-        navigate(`/dashboard/${data.userId}`); // Redirige vers le dashboard
-      } else {
-        setError('Erreur de connexion');
+      if (!apiUrl) {
+        console.error("[useLogin] L'URL de l'API n'est pas définie dans les variables d'environnement");
+        throw new Error("L'URL de l'API n'est pas définie dans les variables d'environnement");
       }
+
+      const sanitizedData = sanitizeFormData({ username: email, password });
+      const data = await loginUser(sanitizedData.username, sanitizedData.password, apiUrl);
+
+      setAuthSession({
+        email: sanitizedData.username,
+        password: sanitizedData.password,
+        token: data.token,
+        userId: data.userId,
+      });
+      navigate(`/dashboard/${data.userId}`); // Redirige vers le dashboard
     } catch (err) {
       setError('Erreur serveur');
     }

@@ -14,15 +14,6 @@ export interface ChartBPMProps {
 }
 
 const ChartBPM: React.FC<ChartBPMProps> = ({ data }) => {
-    const fakeData = [
-        { name: 'Lun', pointsaveragebpm: 120, minbpm: 130, maxbpm: 170 },
-        { name: 'Mar', pointsaveragebpm: 125, minbpm: 135, maxbpm: 145 },
-        { name: 'Mer', pointsaveragebpm: 130, minbpm: 132, maxbpm: 160 },
-        { name: 'Jeu', pointsaveragebpm: 128, minbpm: 144, maxbpm: 158 },
-        { name: 'Ven', pointsaveragebpm: 132, minbpm: 137, maxbpm: 152 },
-        { name: 'Sam', pointsaveragebpm: 127, minbpm: 133, maxbpm: 137 },
-        { name: 'Dim', pointsaveragebpm: 129, minbpm: 140, maxbpm: 159 },
-    ];
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const barColor = selectedIndex !== null ? '#0B23F4' : '#F2F3FF';
     const xAndYColor = '#707070';
