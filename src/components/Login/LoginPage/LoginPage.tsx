@@ -2,8 +2,10 @@ import React from 'react'
 import './LoginPage.css'
 import logo from '../../../assets/icons/logo.png'
 import LoginForm from '../LoginForm/LoginForm';
+import { useAuth } from '../../../context/AuthContext';
 
 const LoginPage: React.FC = () => {
+  const { email } = useAuth();
   return (
     <div className="login-page">
       <section className="left-section">
