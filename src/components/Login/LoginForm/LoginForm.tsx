@@ -2,9 +2,11 @@ import { useLogin } from '../UseLogin/UseLogin';
 import './LoginForm.css'
 import '../LoginPage/LoginPage.css'
 import ErrorPopUp from '../../Error/ErrorPopUp';
+import { useAuth } from '../../../context/AuthContext';
 
 const LoginForm = () => {
-    const { email, setEmail, password, setPassword, error, handleSubmit } = useLogin();
+    const { login } = useAuth();
+    const { email, setEmail, password, setPassword, error, handleSubmit } = useLogin(login);
 
     return (
         <form className='login-form' onSubmit={handleSubmit}>

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import './PerformanceSection.css'
 import DateNavigator from '../DateNavigator/DateNavigator'
 import ChartPerformance from '../ChartPerformance/ChartPerformance';
-import { fetchChartKilometres } from '@api/FetchChartKilometres/fecthChartKilometres';
+import { fetchChartKilometres } from '@api/FetchChartKilometres/FecthChartKilometres';
 import ChartBPM from '../ChartBPM/ChartBPM';
 import { fetchChartBPM } from '@api/FetchChartBPM/FetchChartBPM';
 import { useAuth } from '../../../context/AuthContext';
@@ -11,7 +11,6 @@ const PerformanceSection: React.FC = () => {
     const { token } = useAuth();
     const [startDate, setStartDate] = useState(new Date());
     const periodLength = 28;
-    const [startDateBPM, setStartDateBPM] = useState(new Date());
     const periodLengthBPM = 6;
     const endDate = useMemo(
         () => new Date(startDate.getTime() + (periodLength - 1) * 24 * 60 * 60 * 1000),
@@ -27,6 +26,10 @@ const PerformanceSection: React.FC = () => {
     const moyenneKm = ChartData.length > 0 ? Math.ceil(totalKm / ChartData.length) : 0;
     const bpmValues = ChartBPMData.map(item => item.pointsaveragebpm).filter(v => v !== null && v !== undefined && v !== 0);
     const averageBpm = bpmValues.length > 0 ? Math.ceil(bpmValues.reduce((sum, v) => sum + v, 0) / bpmValues.length) : 0;
+    const { token } = useAuth();
+    if (!token) {
+        return null;
+    }
 
     useEffect(() => {
     if (!token) {

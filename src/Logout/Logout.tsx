@@ -1,13 +1,15 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Logout: React.FC = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
-    localStorage.removeItem('token');
+    logout();
     navigate('/');
-  }, [navigate]);
+  }, [logout, navigate]);
 
   return null;
 };
