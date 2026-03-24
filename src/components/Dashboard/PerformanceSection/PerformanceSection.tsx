@@ -2,14 +2,14 @@ import React, { useEffect, useMemo, useState } from 'react'
 import './PerformanceSection.css'
 import DateNavigator from '../DateNavigator/DateNavigator'
 import ChartPerformance from '../ChartPerformance/ChartPerformance';
-import { fetchChartKilometres } from '@api/FetchChartKilometres/FecthChartKilometres';
+import { fetchChartKilometres } from '@api/FetchChartKilometres/fecthChartKilometres';
 import ChartBPM from '../ChartBPM/ChartBPM';
 import { fetchChartBPM } from '@api/FetchChartBPM/FetchChartBPM';
 import { useAuth } from '../../../context/AuthContext';
 
 const PerformanceSection: React.FC = () => {
-    const { token } = useAuth();
     const [startDate, setStartDate] = useState(new Date());
+    const [startDateBPM, setStartDateBPM] = useState(new Date());
     const periodLength = 28;
     const periodLengthBPM = 6;
     const endDate = useMemo(
