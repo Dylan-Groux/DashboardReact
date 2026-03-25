@@ -1,26 +1,31 @@
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell} from 'recharts';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const ChartHebdo: React.FC<{ data: { name: string; pointdayactivity: number }[], objectif: number, totalHebdoActivities: number }> = ({ data, objectif, totalHebdoActivities }) => {
+  return (
+    <PieChart width={400} height={300}>
+      <Pie
+        data={[
+          { value: totalHebdoActivities +1 },
+          { value: Math.max(objectif - totalHebdoActivities, 0) }
+        ]}
+        dataKey="value"
+        cx="50%"
+        cy="50%"
+        outerRadius={100}
+        innerRadius={50}
+        startAngle={0}
+        endAngle={360}
+        isAnimationActive={false}
+        paddingAngle={0}
+        cornerRadius={4}
+        stroke='none'
+      >
+        <Cell fill="#0B23F4" /> {/* bleu foncé */}
+        <Cell fill="#B6BDFC" />    {/* partie non réalisée, bleu clair */}
+      </Pie>
+    </PieChart>
+  );
+};
 
-const ChartHebdo: React.FC<{ data: { name: string; pointdayactivity: number }[] }> = ({ data }) => (
-  <PieChart width={400} height={300}>
-    <Pie
-      data={data}
-      dataKey="pointdayactivity"
-      nameKey="name"
-      cx="50%"
-      cy="50%"
-      outerRadius={100}
-      fill="#8884d8"
-      label
-    >
-      {data.map((entry, index) => (
-        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-      ))}
-    </Pie>
-    <Tooltip />
-    <Legend />
-  </PieChart>
-);
 
 export default ChartHebdo;

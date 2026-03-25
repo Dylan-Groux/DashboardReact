@@ -4,6 +4,8 @@ import './index.css'
 import { useEffect, useState } from 'react';
 import { mapUserActivity } from '@api/Mapping/UserActivity';
 import type { UserActivity, UserActivityRawHebdo } from '@api/Mapping/types/UserActivityTypes';
+import { useActivitiesDuration } from '../../../hooks/User/Activities/useActivitiesDuration';
+import { useActivitiesKm } from '../../../hooks/User/Activities/useActivitiesKm';
 
 type HebdoPerformanceSectionProps = {
     startDateBPM: Date;
@@ -16,6 +18,11 @@ const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ start
         return null;
     }
     const [ChartData, setChartData] = useState<UserActivity[]>([]);
+    const objectifHebdo = 6;
+    const totalHebdoActivties = ChartData.reduce((sum, item) => sum + (item.pointdayactivity ?? 0), 0);
+    const totalHebdoActivitiesNeeded = Math.max(0, objectifHebdo - totalHebdoActivties);
+    const userActivitiesThisWeek = useActivitiesDuration(startDateBPM, endDateBPM);
+    const userDistanceThisWeek = useActivitiesKm(startDateBPM, endDateBPM);
 
     useEffect(() => {
         if (!token) return;
@@ -35,24 +42,38 @@ const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ start
       </div>
       <div className='body-hebdo-section'>
         <div className='hebdo-chart'>
-            <span>X4<p>sur objectif de 6</p></span>
+            <span className='hebdo-title'>{totalHebdoActivties}x <p>sur objectif de {objectifHebdo}</p></span>
             <p className='hebdo-desc'>courses hebdomadaires réalisées</p>
             <div className='chart'>
+              <div className='total-activities-done'>
+                <div className='total-activities-flex'>
+                  <span className="legend-dot-done dot"></span>
+                  <span>{totalHebdoActivties} réalisées</span>
+                </div>
+              </div>
               <ChartHebdo
                 data={ChartData.map(item => ({
                   name: item.name,
                   pointdayactivity: item.pointdayactivity ?? 0,
                 }))}
+                objectif={objectifHebdo}
+                totalHebdoActivities={totalHebdoActivties}
               />
+              <div className='total-activities-needed'>
+                <div className='total-activities-flex'>
+                  <span className="legend-dot-needed dot"></span>
+                  <span>{totalHebdoActivitiesNeeded} restantes</span>
+                </div>
+              </div>
             </div>
         </div>
         <div className='user-activity'>
             <h3 className='user-activity-title'>Durée d'activité</h3>
-            <span>140<p>minutes</p></span>
+            <span>{userActivitiesThisWeek.totalDuration}<p>minutes</p></span>
         </div>
         <div className='user-distance'>
             <h3 className='user-distance-title'>Distance</h3>
-            <span>21.7<p>kilomètres</p></span>
+            <span>{userDistanceThisWeek.totalDistance}<p>kilomètres</p></span>
         </div>
       </div>
     </div>
