@@ -148,7 +148,8 @@ const ChartBPM: React.FC<ChartBPMProps> = ({ data }) => {
             <YAxis
               tickLine={false} 
               tick={false}
-              domain={[startBPM, 'dataMax']} 
+              domain={[startBPM, maxTick]}
+              allowDataOverflow
               ticks={ticks} 
               padding={{ bottom: 1 }} 
               axisLine={{ stroke: lineColor, strokeWidth: 1, dx: -10 }}

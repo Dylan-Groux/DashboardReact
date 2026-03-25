@@ -46,7 +46,7 @@
     grid-row: 1/4;        /* Première ligne */
 }
 
-.hebdo-chart span {
+.hebdo-chart .hebdo-title {
     margin-top: 18px;
     margin-left: 36px;
     display: flex;
@@ -164,4 +164,79 @@
 
 .user-distance, .user-activity {
     height: 103px;
+}
+
+.chart svg {
+    transform: rotate(-130deg);
+}
+
+.chart {
+    position: relative;
+    bottom: 30px;
+}
+
+.total-activities-needed {
+    position: relative;
+    top: 45px;
+    right: 120px;
+}
+
+.total-activities-done {
+    position: relative;
+    top: 220px;
+    left: 120px;
+}
+
+.total-activities-needed {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.legend-dot-done {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    background-color: #7987FF;
+}
+
+.legend-dot-needed {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    background-color: #F4320B;
+}
+
+.total-activities-flex {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    color: #707070;
+    font-family: "Inter", sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 10px;
+    line-height: 100%;
+    letter-spacing: 0px;
+}
+
+.legend-dot-done,
+.legend-dot-needed {
+    width: 6.55px;
+    height: 6.55px;
+    border-radius: 16px;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.legend-dot-done {
+    background-color: #0B23F4;
+}
+
+.legend-dot-needed {
+    background-color: #B6BDFC;
 }

@@ -1,6 +1,6 @@
 import { getUserInformations, type UserInformation } from "@api/UserInformation/GetUserInformation";
 import { useContext, useEffect, useState } from "react";    
-import { ApiUrlContext } from "../../context/ApiUrlContext";
+import { ApiUrlContext } from "../../../context/ApiUrlContext";
 
 /**
  * Hook personnalisé pour récupérer les informations de l'utilisateur en fonction du token d'authentification.
