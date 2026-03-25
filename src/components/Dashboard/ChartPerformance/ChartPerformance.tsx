@@ -3,7 +3,7 @@ import CustomTooltip from './ToolTips';
 import { useState } from 'react';
 
 export interface ChartPerformanceProps {
-    data: {name: string; uv: number}[];
+    data: {name: string ; uv: number | null}[];
     startDate: Date;
     endDate: Date;
 }
@@ -26,7 +26,7 @@ const ChartPerformance: React.FC<ChartPerformanceProps> = ({ data }) => {
     const EmptyTooltip = () => <div style={{ display: 'none' }} />;
 
     const step = 10; // Intervalle de 10 km
-    const maxValue = Math.max(...data.map(d => d.uv));
+    const maxValue = Math.max(...data.map(d => d.uv ?? 0));
     const maxTick = Math.ceil(maxValue / step) * step;
     const ticks = [];
     for (let i = 0; i <= maxTick; i += step) {

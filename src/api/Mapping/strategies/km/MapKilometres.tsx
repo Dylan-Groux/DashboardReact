@@ -1,5 +1,5 @@
 import type { UserActivityRawKm} from "../../types/UserActivityTypes";
-import { normalizeDate } from "../../../../utils/NormalizeDate";
+import { normalizeDate, parseApiDate } from "../../../../utils/NormalizeDate";
 import type { UserActivity } from "../../types/UserActivityTypes";
 /**
  * 
@@ -21,7 +21,7 @@ export function mapKilometres(data: UserActivityRawKm[], startDate: Date, endDat
 
     return weeks.map((week, idx) => {
         const weekActivities = data.filter((item: UserActivityRawKm) => {
-            const d = normalizeDate(new Date(item.date));
+            const d = normalizeDate(parseApiDate(item.date));
             const start = normalizeDate(week.start);
             const end = normalizeDate(week.end);
             return d >= start && d <= end;

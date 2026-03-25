@@ -8,6 +8,10 @@ export type UserActivityRawHR = {
     heartRate: { min: number; max: number; average: number }; 
 }
 
+export type UserActivityRawHebdo = {
+    date: string;  
+}
+
 export type HeartRateArray = 
 { 
     min: number; 
@@ -18,8 +22,9 @@ export type HeartRateArray =
 
 export type UserActivity = {
     name : string;
-    uv?: number;
+    uv?: number | null;
     pointsaveragebpm?: number | null;
     minbpm?: number | null;
     maxbpm?: number | null;
+    pointdayactivity?: number | null;
 }

@@ -1,35 +1,40 @@
 import './DateNavigator.css';
+import { getMonday } from '../../../utils/NormalizeDate';
 
 export interface DateNavigatorProps {
     periodLength?: number; // nombre de jours dans la période (ex: 28 ou 7)
     startDate: Date; // date de début de la période
     setStartDate: React.Dispatch<React.SetStateAction<Date>>;
+    alignToMonday?: boolean;
 }
 
 const DateNavigator: React.FC<DateNavigatorProps> = ({
   periodLength = 28,
   startDate,
   setStartDate,
+  alignToMonday = false,
 })  => {
-
-    const endDate = new Date(startDate);
+    const effectiveStartDate = alignToMonday ? getMonday(startDate) : new Date(startDate);
+    const endDate = new Date(effectiveStartDate);
     endDate.setDate(endDate.getDate() + (periodLength - 1));
     const today = new Date();
-    const nextPeriodStart = new Date(startDate);
+    const nextPeriodStart = new Date(effectiveStartDate);
+    const navigationStep = alignToMonday ? 7 : periodLength;
 
-    nextPeriodStart.setDate(nextPeriodStart.getDate() + periodLength);
-    const isNextDisabled = nextPeriodStart > today;
+    nextPeriodStart.setDate(nextPeriodStart.getDate() + navigationStep);
+    const maxNavigableStartDate = alignToMonday ? getMonday(today) : today;
+    const isNextDisabled = nextPeriodStart > maxNavigableStartDate;
 
     const handlePrevious = () => {
-        const prev = new Date(startDate);
-        prev.setDate(prev.getDate() - periodLength);
-        setStartDate(prev);
+        const prev = new Date(effectiveStartDate);
+        prev.setDate(prev.getDate() - navigationStep);
+        setStartDate(alignToMonday ? getMonday(prev) : prev);
     };
 
     const handleNext = () => {
-        const next = new Date(startDate);
-        next.setDate(next.getDate() + periodLength);
-        setStartDate(next);
+        const next = new Date(effectiveStartDate);
+        next.setDate(next.getDate() + navigationStep);
+        setStartDate(alignToMonday ? getMonday(next) : next);
     };
 
     const formatedStringDate = (date: Date) => {
@@ -51,7 +56,7 @@ const DateNavigator: React.FC<DateNavigatorProps> = ({
                 &lt;
             </button>
             <div>
-                <span>{formatedStringDate(startDate)} - {formatedStringDate(endDate)}</span>
+                <span>{formatedStringDate(effectiveStartDate)} - {formatedStringDate(endDate)}</span>
             </div>
             <button
                 onClick={handleNext}

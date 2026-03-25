@@ -1,27 +1,16 @@
-import { mapUserActivity } from "@api/Mapping/UserActivity";
 import type { UserActivityRawKm } from "@api/Mapping/types/UserActivityTypes";
-
-/**
- * @type {ListeOfUserActivityKilometres}
- * Type pour la liste des activités de l'utilisateur en kilomètres, utilisée pour les graphiques de performance.
- * Chaque objet de la liste contient un nom (ex: "S1" pour semaine 1) et une valeur uv représentant les kilomètres totaux pour cette période.
- */
-export type ListeOfUserActivityKilometres = { 
-    name: string;
-    uv?: number;
-}[];
 
 /**
  * @param startDate 
  * @param endDate 
- * @returns Liste de type ListeOfUserActivityKilometres
+ * @returns Liste de type UserActivityRawKm[]
  * Permet de renvoyer la liste des kilometres sur une période données. 
  */
 export async function fetchChartKilometres(
     startDate: Date, 
     endDate: Date,
     token: string
-): Promise<ListeOfUserActivityKilometres> {
+): Promise<UserActivityRawKm[]> {
     const apiUrl = import.meta.env.VITE_API_URL;
     if (!apiUrl) {
         throw new Error('L\'URL de l\'API n\'est pas définie dans les variables d\'environnement');
@@ -41,10 +30,5 @@ export async function fetchChartKilometres(
         throw new Error('Données reçues ne contiennent pas de champ date');
     }
 
-    const result = mapUserActivity('kilometres', data, startDate, endDate);
-    if (result.length === 0) {
-        console.warn('Aucune donnée de kilomètres trouvée pour la période spécifiée');
-    }
-
-    return result;
+    return data;
 }
