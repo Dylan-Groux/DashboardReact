@@ -10,10 +10,10 @@ export function useActivitiesKm(
   startDate: Date,
   endDate: Date
 ): UserActivitiesKmState {
-  const { userInformation, loading, error } = useUserActivitiesWithAuth(startDate, endDate);
+  const { userActivities, loading, error } = useUserActivitiesWithAuth(startDate, endDate);
 
-  const totalDistance = userInformation
-    ? userInformation.reduce((sum, activity) => sum + (activity.distance || 0), 0)
+  const totalDistance = userActivities
+    ? userActivities.reduce((sum, activity) => sum + (activity.distance || 0), 0)
     : 0;
 
   return {

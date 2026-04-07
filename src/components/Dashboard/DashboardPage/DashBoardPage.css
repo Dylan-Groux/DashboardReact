@@ -19,7 +19,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 35px;
     color: #111111;
 }
 
@@ -39,7 +39,7 @@
     font-size: 14px;
     line-height: 100%;
     letter-spacing: 0px;
-    margin-left: 10%;
+    min-width: 300px;
 }
 
 .user-member-name p {

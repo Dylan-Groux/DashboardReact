@@ -10,13 +10,13 @@ import { ApiUrlContext } from "../../../context/ApiUrlContext";
  */
 export const useFetchUserActivities = (token: string | null, startDate: Date, endDate: Date) => {
     const apiUrl = useContext(ApiUrlContext);
-    const [userInformation, setUserInformation] = useState<UserActivities[] | null>(null);
+    const [userActivities, setUserActivities] = useState<UserActivities[] | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     const fetchUserActivities = async () => {
         if (!token) {
-            setUserInformation(null);
+            setUserActivities(null);
             setLoading(false);
             return;
         }
@@ -24,10 +24,10 @@ export const useFetchUserActivities = (token: string | null, startDate: Date, en
         try {
             if (!apiUrl) throw new Error("apiUrl non défini dans ApiUrlContext");
             const info = await getUserActivities(token, startDate, endDate);
-            setUserInformation(info);
+            setUserActivities(info);
             setError(null);
         } catch (err) {
-            setUserInformation(null);
+            setUserActivities(null);
             setError("Erreur lors de la récupération des informations utilisateur");
         } finally {
             setLoading(false);
@@ -38,5 +38,5 @@ export const useFetchUserActivities = (token: string | null, startDate: Date, en
         fetchUserActivities();
     }, [token, apiUrl, startDate, endDate]);
 
-    return { userInformation, loading, error, refresh: fetchUserActivities };
+    return { userActivities, loading, error, refresh: fetchUserActivities };
 };

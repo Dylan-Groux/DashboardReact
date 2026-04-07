@@ -10,10 +10,10 @@ export function useActivitiesDuration(
   startDate: Date,
   endDate: Date
 ): UserActivitiesDurationState {
-  const { userInformation, loading, error } = useUserActivitiesWithAuth(startDate, endDate);
+  const { userActivities, loading, error } = useUserActivitiesWithAuth(startDate, endDate);
 
-  const totalDuration = userInformation
-    ? userInformation.reduce((sum, activity) => sum + (activity.duration || 0), 0)
+  const totalDuration = userActivities
+    ? userActivities.reduce((sum, activity) => sum + (activity.duration || 0), 0)
     : 0;
 
   return {

@@ -10,7 +10,13 @@ export const useUserTotalDuration = () => {
     if (!userInformation) return null;
 
     const userTotalDuration = formattedTotalDuration(userInformation);
-    return userTotalDuration;
+    const userTotalDurationOnlyHours = formattedTotalDurationOnlyHours(userInformation);
+    const userTotalDurationOnlyMinutes = formattedTotalDurationOnlyMinutesNumber(userInformation);
+    return [
+        userTotalDuration,
+        userTotalDurationOnlyHours,
+        userTotalDurationOnlyMinutes
+    ];
 }
 
 /**
@@ -24,4 +30,16 @@ export const formattedTotalDuration = (userInformation: UserInformation) => {
     const formattedDuration = `${hours}h ${minutes}m`;
     
     return formattedDuration;
+}
+
+export const formattedTotalDurationOnlyHours = (userInformation: UserInformation) => {
+    const totalDuration = userInformation.statistics.totalDuration;
+    const hours = Math.floor(totalDuration / 3600);
+    return `${hours}h`;
+}
+
+export const formattedTotalDurationOnlyMinutesNumber = (userInformation: UserInformation) => {
+    const totalDuration = userInformation.statistics.totalDuration;
+    const minutes = Math.floor((totalDuration % 3600) / 60);
+    return minutes;
 }

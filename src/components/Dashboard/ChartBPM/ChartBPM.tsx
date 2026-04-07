@@ -49,7 +49,7 @@ const ChartBPM: React.FC<ChartBPMProps> = ({ data }) => {
     // Applique la moyenne mobile sur les données
     // Détermine le nombre de données valides (non nulles)
     const windowSize = 7; // 7 si 7 données valides, sinon 1
-    console.log("name: ", data.map(d => d.name));
+    console.table("name: ", data.map(d => d.name));
 
     const dataWithMovingAvg = addMovingAverageMaxBpm(data, windowSize);
     return (

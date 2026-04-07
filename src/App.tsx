@@ -7,6 +7,7 @@ import { AuthProvider } from './context/AuthContext';
 import { UserProvider } from './context/UserContext';
 import RequireAuth from './context/RequireAuth';
 import { ApiUrlContext } from './context/ApiUrlContext';
+import Profile from './Profile';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route element={<RequireAuth><Outlet /></RequireAuth>}>
               <Route path="/dashboard/:id" element={<Dashboard />} />
-              <Route path="/profil/:id" element={"TODO : En dev"} />
+              <Route path="/profil/:id" element={<Profile />} />
               {/* Route à certainement rajouter même si non présent dans la maquette */}
               <Route path="/register" element={"TODO : Register"} />
               <Route path="/forgot-password" element={"TODO : Mot de passe oublié"} />

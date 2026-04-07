@@ -1,11 +1,15 @@
 import { useUserTotalDistance } from "./useUserTotalDistance";
 import { useUserTotalSessions } from "./useUserTotalSessions";
 import { useUserTotalDuration } from "./useUserTotalDuration";
+import { useTotalDayOffline, type UserTotalDayOfflineState } from "../Activities/useTotalDayOffline";
+import { useTotalKcalBurned, type UserTotalKcalBurnedState } from "../Activities/useTotalKcalBurned";
 
 export type UserStatistics = {
     userTotalDistance: number | null;
-    userTotalDuration: string | null;
+    userTotalDuration: Array<string | number> | null;
     userTotalSessions: number | null;
+    userTotalDayOffline: UserTotalDayOfflineState | null;
+    userTotalKcalBurned: UserTotalKcalBurnedState | null;
 }
 
 /**
@@ -17,10 +21,14 @@ export const useUserStatistics = (): UserStatistics => {
     const userTotalDistance = useUserTotalDistance();
     const userTotalDuration = useUserTotalDuration();
     const userTotalSessions = useUserTotalSessions();
+    const userTotalDayOffline = useTotalDayOffline();
+    const userTotalKcalBurned = useTotalKcalBurned();
 
     return {
         userTotalDistance,
         userTotalDuration,
-        userTotalSessions
+        userTotalSessions,
+        userTotalDayOffline,
+        userTotalKcalBurned
     }
 }
