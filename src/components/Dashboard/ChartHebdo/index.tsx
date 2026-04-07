@@ -5,7 +5,7 @@ const ChartHebdo: React.FC<{ data: { name: string; pointdayactivity: number }[],
     <PieChart width={400} height={300}>
       <Pie
         data={[
-          { value: totalHebdoActivities +1 },
+          { value: totalHebdoActivities },
           { value: Math.max(objectif - totalHebdoActivities, 0) }
         ]}
         dataKey="value"
@@ -26,6 +26,5 @@ const ChartHebdo: React.FC<{ data: { name: string; pointdayactivity: number }[],
     </PieChart>
   );
 };
-
 
 export default ChartHebdo;

@@ -20,9 +20,9 @@ export function formatMemberDate(userInformation: UserInformation): string {
     const date = new Date(userInformation.profile.createdAt);
     if (!date) {
         console.error('Date de création de l\'utilisateur non disponible');
-        return 'Taille non disponible';
+        return 'Date non disponible';
     }
-    const formatedDate = ('Membre depuis le ' + date.getDate() + ' ' + date.toLocaleString('fr-FR', { month: 'long' }) + ' ' + date.getFullYear());
-    console.log('Date de création formatée :', formatedDate);
+    const formatedDate = (' le ' + date.getDate() + ' ' + date.toLocaleString('fr-FR', { month: 'long' }) + ' ' + date.getFullYear());
+    //console.log('Date de création formatée :', formatedDate);
     return formatedDate;
 }

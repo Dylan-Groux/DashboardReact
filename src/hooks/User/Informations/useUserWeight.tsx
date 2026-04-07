@@ -8,6 +8,6 @@ export const useUserWeight = () => {
     const { userInformation } = useUserInformationWithAuth();
     if (!userInformation) return null;
 
-    const userWeight = `${userInformation.profile.weight} kg`;
+    const userWeight = `${userInformation.profile.weight}kg`;
     return userWeight;
 }

@@ -4,6 +4,7 @@ import { useUserName } from "./useUserName";
 import { useUserGender } from "./useUserGender";
 import { useUserSize } from "./useUserSize";
 import { useUserAge } from "./useUserAge";
+import { useUserWeight } from "./useUserWeight";
 
 export type UserProfile = {
     userAge: number | null;
@@ -12,6 +13,7 @@ export type UserProfile = {
     userName: string | null;
     userPicture: string | null;
     userDate: string | null;
+    userWeight: string | null;
 }
 
 /**
@@ -26,6 +28,7 @@ export const useUserProfile = () => {
     const userName = useUserName();
     const userPicture = useUserPicture();
     const userDate = useUserDate();
+    const userWeight = useUserWeight();
 
     return {
         userAge,
@@ -33,6 +36,7 @@ export const useUserProfile = () => {
         userSize,
         userName,
         userPicture,
-        userDate
+        userDate,
+        userWeight
     }
 }

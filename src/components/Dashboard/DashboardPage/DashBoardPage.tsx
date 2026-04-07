@@ -6,7 +6,7 @@ import { useUser } from '../../../context/UserContext';
 const DashboardPage: React.FC = () => {
   const defaultProfilePicture = '/src/assets/sophie.png'; // URL d'une image par défaut
   const { userProfile, userStatistics } = useUser();
-  const { userPicture, userDate, userName, userGender, userSize } = userProfile || {};
+  const { userPicture, userDate, userName} = userProfile || {};
   const { userTotalDistance } = userStatistics || {};
   
   return (
@@ -19,7 +19,7 @@ const DashboardPage: React.FC = () => {
         />
         <div className='user-member-name'>
           <h1>{userName || 'Utilisateur'}</h1>
-          <p>{userDate}</p>
+          <p>Membre depuis {userDate}</p>
         </div>
       </div>
       <div className='user-parcours'>
@@ -30,8 +30,6 @@ const DashboardPage: React.FC = () => {
             {userTotalDistance !== null
             ? `${userTotalDistance} km` 
             : '0 km'}
-            {userGender ? ` (${userGender})` : ''}
-            { userSize ? ` (${userSize})` : ''}
           </p>
         </div>
       </div>

@@ -69,11 +69,11 @@ const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ start
         </div>
         <div className='user-activity'>
             <h3 className='user-activity-title'>Durée d'activité</h3>
-            <span>{userActivitiesThisWeek.totalDuration}<p>minutes</p></span>
+            <span>{userActivitiesThisWeek.totalDuration?.toFixed(0)}<p>minutes</p></span>
         </div>
         <div className='user-distance'>
             <h3 className='user-distance-title'>Distance</h3>
-            <span>{userDistanceThisWeek.totalDistance}<p>kilomètres</p></span>
+            <span>{userDistanceThisWeek.totalDistance?.toFixed(1)}<p>kilomètres</p></span>
         </div>
       </div>
     </div>

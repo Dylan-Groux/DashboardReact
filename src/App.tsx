@@ -1,12 +1,13 @@
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import './App.css'
 import Dashboard from './Dashboard';
 import Logout from './Logout/Logout';
 import { AuthProvider } from './context/AuthContext';
 import { UserProvider } from './context/UserContext';
-import RequireAuth from './context/RequireAuth';
+import AuthGuard from './components/Guard/AuthGuard';
 import { ApiUrlContext } from './context/ApiUrlContext';
+import Profile from './Profile';
 
 function App() {
   return (
@@ -16,9 +17,9 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Login />} />
-              <Route element={<RequireAuth><Outlet /></RequireAuth>}>
+              <Route element={<AuthGuard />}>
               <Route path="/dashboard/:id" element={<Dashboard />} />
-              <Route path="/profil/:id" element={"TODO : En dev"} />
+              <Route path="/profil/:id" element={<Profile />} />
               {/* Route à certainement rajouter même si non présent dans la maquette */}
               <Route path="/register" element={"TODO : Register"} />
               <Route path="/forgot-password" element={"TODO : Mot de passe oublié"} />
