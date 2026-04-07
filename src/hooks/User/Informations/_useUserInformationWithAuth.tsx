@@ -1,4 +1,3 @@
-import { useAuth } from "../../../context/AuthContext";
 import { useFetchUserInformations } from "./_useUserInformations";
 
 /**
@@ -7,7 +6,6 @@ import { useFetchUserInformations } from "./_useUserInformations";
  * @desc contenant les informations de l'utilisateur, un indicateur de chargement, une éventuelle erreur et une fonction pour rafraîchir les données
  */
 export const useUserInformationWithAuth = () => {
-    const { token } = useAuth();
-    const { userInformation, loading, error, refresh } = useFetchUserInformations(token);
+    const { userInformation, loading, error, refresh } = useFetchUserInformations();
     return { userInformation, loading, error, refresh };
 }

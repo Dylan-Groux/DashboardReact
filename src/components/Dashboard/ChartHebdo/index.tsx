@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell} from 'recharts';
 
-const ChartHebdo: React.FC<{ data: { name: string; pointdayactivity: number }[], objectif: number, totalHebdoActivities: number }> = ({ data, objectif, totalHebdoActivities }) => {
+const ChartHebdo: React.FC<{ objectif: number, totalHebdoActivities: number }> = ({ objectif, totalHebdoActivities }) => {
   return (
     <PieChart width={400} height={300}>
       <Pie

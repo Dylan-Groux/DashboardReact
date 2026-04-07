@@ -16,6 +16,7 @@ header {
     display: flex;
     margin: 0;
     padding: 14px 20px;
+    cursor: pointer;
 }
 
 .navbar li {

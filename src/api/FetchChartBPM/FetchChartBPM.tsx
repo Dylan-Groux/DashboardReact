@@ -1,4 +1,5 @@
 import type { UserActivityRawHR } from "@api/Mapping/types/UserActivityTypes";
+import type { ApiClientType } from "../../context/ApiClientContext";
 import { formatApiDate } from "../../utils/NormalizeDate";
 
 /**
@@ -10,13 +11,8 @@ import { formatApiDate } from "../../utils/NormalizeDate";
 export async function fetchChartBPM(
     startDateBPM: Date, 
     endDateBPM: Date,
-    token: string
+    get: ApiClientType['get']
 ): Promise<UserActivityRawHR[]> {
-    const apiUrl = import.meta.env.VITE_API_URL;
-    if (!apiUrl) {
-        throw new Error('L\'URL de l\'API n\'est pas définie dans les variables d\'environnement');
-    }
-    
     const startDateBPMApiString = formatApiDate(startDateBPM);
     const endDateBPMApiString = formatApiDate(endDateBPM);
 
@@ -24,15 +20,7 @@ export async function fetchChartBPM(
         startDateBPM: startDateBPMApiString,
         endDateBPM: endDateBPMApiString,
     });
-    const response = await fetch(`${apiUrl}/user-activity?startWeek=${startDateBPMApiString}&endWeek=${endDateBPMApiString}`, {
-        headers: {
-            'Authorization': `Bearer ${token}`,
-        },
-    });
-    if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des données');
-    }
-    const data: UserActivityRawHR[] = await response.json();
+    const data = await get<UserActivityRawHR[]>(`/user-activity?startWeek=${startDateBPMApiString}&endWeek=${endDateBPMApiString}`);
 
     if (!Array.isArray(data)) {
         throw new Error('Données reçues dans un format inattendu');

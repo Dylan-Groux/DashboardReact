@@ -27,6 +27,7 @@
     line-height: 100%;
     letter-spacing: 0px;
     margin-top: 5%;
+    cursor: pointer;
 }
 
 .forgot-password-link {

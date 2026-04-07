@@ -7,6 +7,7 @@ import ChartBPM from '../ChartBPM/ChartBPM';
 import { fetchChartBPM } from '@api/FetchChartBPM/FetchChartBPM';
 import { mapUserActivity } from '@api/Mapping/UserActivity';
 import type { UserActivity, UserActivityRawHR, UserActivityRawKm } from '@api/Mapping/types/UserActivityTypes';
+import { useApiClient } from '../../../context/ApiClientContext';
 
 type PerformanceSectionProps = {
     startDate: Date;
@@ -17,7 +18,6 @@ type PerformanceSectionProps = {
     endDateBPM: Date;
     periodLength: number;
     periodLengthBPM: number;
-    token: string;
 };
 
 const PerformanceSection: React.FC<PerformanceSectionProps> = ({
@@ -27,10 +27,10 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = ({
     endDateBPM,
     startDateBPM,
     setStartDateBPM,
-    token,
     periodLength,
     periodLengthBPM,
 }) => {
+    const { get, hasToken } = useApiClient();
     const [ChartData, setChartData] = useState<UserActivity[]>([]);
     const [ChartBPMData, setChartBPMData] = useState<UserActivity[]>([]);
 
@@ -45,29 +45,29 @@ const PerformanceSection: React.FC<PerformanceSectionProps> = ({
         ? Math.ceil(bpmValues.reduce((sum, v) => sum + v, 0) / bpmValues.length)
         : 0;
 
-    if (!token) {
-        return null;
-    }
-
     useEffect(() => {
-        if (!token) return;
-        fetchChartKilometres(startDate, endDate, token)
+        if (!hasToken) return;
+        fetchChartKilometres(startDate, endDate, get)
             .then((rawData: UserActivityRawKm[]) => {
                 const mapped = mapUserActivity('kilometres', rawData, startDate, endDate);
                 setChartData(mapped);
             })
             .catch(err => console.error(err));
-    }, [endDate, startDate, token]);
+    }, [endDate, get, hasToken, startDate]);
 
     useEffect(() => {
-        if (!token) return;
-        fetchChartBPM(startDateBPM, endDateBPM, token)
+        if (!hasToken) return;
+        fetchChartBPM(startDateBPM, endDateBPM, get)
             .then((rawData: UserActivityRawHR[]) => {
                 const mapped = mapUserActivity('bpm', rawData, startDateBPM, endDateBPM);
                 setChartBPMData(mapped);
             })
             .catch(err => console.error(err));
-    }, [endDateBPM, startDateBPM, token]);
+    }, [endDateBPM, get, hasToken, startDateBPM]);
+
+    if (!hasToken) {
+        return null;
+    }
 
     return (
         <div className='performance-section'>

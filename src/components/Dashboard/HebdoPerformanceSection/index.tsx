@@ -6,17 +6,15 @@ import { mapUserActivity } from '@api/Mapping/UserActivity';
 import type { UserActivity, UserActivityRawHebdo } from '@api/Mapping/types/UserActivityTypes';
 import { useActivitiesDuration } from '../../../hooks/User/Activities/useActivitiesDuration';
 import { useActivitiesKm } from '../../../hooks/User/Activities/useActivitiesKm';
+import { useApiClient } from '../../../context/ApiClientContext';
 
 type HebdoPerformanceSectionProps = {
     startDateBPM: Date;
     endDateBPM: Date;
-    token: string;
 };
 
-const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ startDateBPM, endDateBPM, token }) => {
-    if (!token) {
-        return null;
-    }
+const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ startDateBPM, endDateBPM }) => {
+  const { get, hasToken } = useApiClient();
     const [ChartData, setChartData] = useState<UserActivity[]>([]);
     const objectifHebdo = 6;
     const totalHebdoActivties = ChartData.reduce((sum, item) => sum + (item.pointdayactivity ?? 0), 0);
@@ -25,14 +23,18 @@ const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ start
     const userDistanceThisWeek = useActivitiesKm(startDateBPM, endDateBPM);
 
     useEffect(() => {
-        if (!token) return;
-        fetchChartHebdo(startDateBPM, endDateBPM, token)
+      if (!hasToken) return;
+      fetchChartHebdo(startDateBPM, endDateBPM, get)
             .then((rawData: UserActivityRawHebdo[]) => {
                 const mapped = mapUserActivity('hebdo', rawData, startDateBPM, endDateBPM);
                 setChartData(mapped);
             })
             .catch(err => console.error(err));
-    }, [endDateBPM, startDateBPM, token]);
+    }, [endDateBPM, get, hasToken, startDateBPM]);
+
+    if (!hasToken) {
+        return null;
+    }
 
   return (
     <div className='hebdo-section'>
@@ -52,10 +54,6 @@ const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ start
                 </div>
               </div>
               <ChartHebdo
-                data={ChartData.map(item => ({
-                  name: item.name,
-                  pointdayactivity: item.pointdayactivity ?? 0,
-                }))}
                 objectif={objectifHebdo}
                 totalHebdoActivities={totalHebdoActivties}
               />

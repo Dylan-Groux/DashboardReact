@@ -1,15 +1,19 @@
-  import React, { useContext, useState } from 'react';
-  import { useNavigate } from 'react-router-dom';
-import { ApiUrlContext } from '../../../context/ApiUrlContext';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useApiClient } from '../../../context/ApiClientContext';
 import { useAuth } from '../../../context/AuthContext';
-import { loginUser } from '@api/LoginUser';
+
+type LoginResponse = {
+  token: string;
+  userId: string;
+};
 
 export const useLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const apiUrl = useContext(ApiUrlContext);
+  const api = useApiClient();
   const { setAuthSession } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,17 +21,14 @@ export const useLogin = () => {
     setError('');
 
     try {
-      if (!apiUrl) {
-        console.error("[useLogin] L'URL de l'API n'est pas définie dans les variables d'environnement");
-        throw new Error("L'URL de l'API n'est pas définie dans les variables d'environnement");
-      }
-
       const sanitizedData = sanitizeFormData({ username: email, password });
-      const data = await loginUser(sanitizedData.username, sanitizedData.password, apiUrl);
+      const data = await api.post<LoginResponse, { username: string; password: string }>('/login', {
+        username: sanitizedData.username,
+        password: sanitizedData.password,
+      });
 
       setAuthSession({
         email: sanitizedData.username,
-        password: sanitizedData.password,
         token: data.token,
         userId: data.userId,
       });

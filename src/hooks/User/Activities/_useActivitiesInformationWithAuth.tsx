@@ -1,4 +1,3 @@
-import { useAuth } from "../../../context/AuthContext";
 import { useFetchUserActivities } from "./_useActivitiesInformations";
 
 /**
@@ -7,7 +6,6 @@ import { useFetchUserActivities } from "./_useActivitiesInformations";
  * @desc contenant les activités de l'utilisateur, un indicateur de chargement, une éventuelle erreur et une fonction pour rafraîchir les données
  */
 export const useUserActivitiesWithAuth = (startDate: Date, endDate: Date) => {
-    const { token } = useAuth();
-    const { userActivities, loading, error, refresh } = useFetchUserActivities(token, startDate, endDate);
+    const { userActivities, loading, error, refresh } = useFetchUserActivities(startDate, endDate);
     return { userActivities, loading, error, refresh };
 }
