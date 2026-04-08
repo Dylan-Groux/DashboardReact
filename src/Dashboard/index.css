@@ -1,0 +1,22 @@
+.dashboard-performance-section {
+  padding: 20px;
+  margin-left: 12%;
+  margin-right: 12%;
+  margin-top: 7%;
+}
+
+.dashboard-performance-section h2 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-style: Medium;
+  font-size: 22px;
+  line-height: 100%;
+  letter-spacing: 0px;
+  color: #111111;
+}
+
+.dashboard-performance-grid {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  gap: 20px;
+}

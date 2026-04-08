@@ -1,0 +1,80 @@
+.dashboard-performance-card {
+    padding: 30px;
+    padding-left: 10px;
+    padding-top: 10px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+}
+
+.dashboard-performance-card-header {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-areas:
+        "title select"
+        "desc desc";
+    align-items: center;
+    padding-left: 20px;
+}
+
+.dashboard-performance-card-header h3 {
+    grid-area: title;
+    font-family: 'Inter', sans-serif;
+    font-weight: 200;
+    font-style: normal;
+    font-size: 22px;
+    line-height: 100%;
+    letter-spacing: 0px;
+}
+
+.dashboard-performance-card-header p {
+    grid-area: desc;
+    margin-top: -10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-style: Regular;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0px;
+    color: #707070;
+}
+
+.dashboard-performance-title-bpm {
+    color: #dd2810;
+}
+
+.dashboard-performance-legend {
+    display: flex;
+    align-items: start;
+    margin-top: 15px;
+    padding-left: 20px;
+}
+
+.dashboard-performance-dot {
+    width: 8px;
+    height: 8px;
+    align-self: center;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+.dashboard-performance-dot-bpm {
+    background-color: #7987FF;
+}
+
+.dashboard-performance-dot-bpm-light {
+    background-color: #FFB6B6;
+}
+
+.dashboard-performance-dot-bpm-strong {
+    background-color: #2D5BFF;
+}
+
+.dashboard-performance-legend-text {
+    font-size: 12px;
+    color: #707070;
+}
+
+.dashboard-performance-legend-spaced {
+    margin-right: 10px;
+}

@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react'
+import './index.css';
 import Footer from '../components/Footer/Footer';
 import Header from '../components/Header/Header';
 import DashboardPage from '../components/Dashboard/DashboardPage/DashBoardPage';
-import PerformanceSection from '../components/Dashboard/PerformanceSection/PerformanceSection';
+import KilometresPerformanceSection from '../components/Dashboard/KilometresPerformanceSection';
+import BPMPerformanceSection from '../components/Dashboard/BPMPerformanceSection';
 import HebdoPerformanceSection from '../components/Dashboard/HebdoPerformanceSection';
 import { getMonday } from '../utils/NormalizeDate';
 
@@ -25,16 +27,23 @@ const Dashboard: React.FC = () => {
     <div className="dashboard-wrapper">
       <Header />
       <DashboardPage />
-      <PerformanceSection
-        startDate={startDate}
-        setStartDate={setStartDate}
-        startDateBPM={startDateBPM}
-        setStartDateBPM={setStartDateBPM}
-        endDate={endDate}
-        endDateBPM={endDateBPM}
-        periodLength={periodLength}
-        periodLengthBPM={periodLengthBPM}
-      />
+      <section className="dashboard-performance-section">
+        <h2>Vos dernières performances</h2>
+        <div className="dashboard-performance-grid">
+          <KilometresPerformanceSection
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            periodLength={periodLength}
+          />
+          <BPMPerformanceSection
+            startDateBPM={startDateBPM}
+            setStartDateBPM={setStartDateBPM}
+            endDateBPM={endDateBPM}
+            periodLengthBPM={periodLengthBPM}
+          />
+        </div>
+      </section>
       <HebdoPerformanceSection 
         startDateBPM={startDateBPM} 
         endDateBPM={endDateBPM} 
