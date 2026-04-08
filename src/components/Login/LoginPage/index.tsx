@@ -1,7 +1,7 @@
 import React from 'react'
 import './LoginPage.css'
 import logo from '../../../assets/icons/logo.png'
-import LoginForm from '../LoginForm/LoginForm';
+import LoginForm from '../LoginForm';
 
 const LoginPage: React.FC = () => {
   return (

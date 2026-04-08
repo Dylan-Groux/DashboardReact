@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import './index.css';
-import Footer from '../components/Footer/Footer';
-import Header from '../components/Header/Header';
-import DashboardPage from '../components/Dashboard/DashboardPage/DashBoardPage';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import DashboardPage from '../components/Dashboard/DashboardPage';
 import KilometresPerformanceSection from '../components/Dashboard/KilometresPerformanceSection';
 import BPMPerformanceSection from '../components/Dashboard/BPMPerformanceSection';
 import HebdoPerformanceSection from '../components/Dashboard/HebdoPerformanceSection';

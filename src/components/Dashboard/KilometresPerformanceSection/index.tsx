@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
-import DateNavigator from '../DateNavigator/DateNavigator';
-import ChartPerformance from '../ChartPerformance/ChartPerformance';
+import DateNavigator from '../DateNavigator';
+import ChartPerformance from '../ChartPerformance';
 import { fetchChartKilometres } from '@api/FetchChartKilometres/fecthChartKilometres';
 import { mapUserActivity } from '@api/Mapping/UserActivity';
 import type { UserActivity, UserActivityRawKm } from '@api/Mapping/types/UserActivityTypes';

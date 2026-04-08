@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
-import DateNavigator from '../DateNavigator/DateNavigator';
-import ChartBPM from '../ChartBPM/ChartBPM';
+import DateNavigator from '../DateNavigator';
+import ChartBPM from '../ChartBPM';
 import { fetchChartBPM } from '@api/FetchChartBPM/FetchChartBPM';
 import { mapUserActivity } from '@api/Mapping/UserActivity';
 import type { UserActivity, UserActivityRawHR } from '@api/Mapping/types/UserActivityTypes';

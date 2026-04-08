@@ -1,7 +1,7 @@
-import { useLogin } from '../UseLogin/UseLogin';
+import { useLogin } from '../UseLogin';
 import './LoginForm.css'
 import '../LoginPage/LoginPage.css'
-import ErrorPopUp from '../../Error/ErrorPopUp';
+import ErrorPopUp from '../../Error';
 
 const LoginForm = () => {
     const { email, setEmail, password, setPassword, error, handleSubmit } = useLogin();

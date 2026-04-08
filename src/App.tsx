@@ -6,7 +6,7 @@ import Logout from './Logout/Logout';
 import { AuthProvider } from './context/AuthContext';
 import { ApiClientProvider } from './context/ApiClientContext';
 import { UserProvider } from './context/UserContext';
-import AuthGuard from './components/Guard/AuthGuard';
+import AuthGuard from './components/Guard';
 import { ApiUrlContext } from './context/ApiUrlContext';
 import Profile from './Profile';
 
