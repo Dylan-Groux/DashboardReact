@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useMemo } from 'react';
 import { useAuth } from './AuthContext';
 import { useApiUrl } from './ApiUrlContext';
+import { useError } from './ErrorContext';
 
 export type ApiClientType = {
   request: (path: string, init?: RequestInit) => Promise<Response>;
@@ -14,6 +15,7 @@ const ApiClientContext = createContext<ApiClientType | undefined>(undefined);
 export const ApiClientProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const apiUrl = useApiUrl();
   const { token, logout } = useAuth();
+  const { showError } = useError();
 
   const request = useCallback(async (path: string, init: RequestInit = {}) => {
     const headers = new Headers(init.headers);
@@ -26,22 +28,43 @@ export const ApiClientProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       headers.set('Authorization', `Bearer ${token}`);
     }
 
-    const response = await fetch(`${apiUrl}${path}`, {
-      ...init,
-      headers,
-    });
+    let response: Response;
+
+    try {
+      response = await fetch(`${apiUrl}${path}`, {
+        ...init,
+        headers,
+      });
+    } catch {
+      showError({
+        title: 'Serveur indisponible',
+        message: 'La requete n a pas pu atteindre l API. Verifiez la connexion ou le serveur.',
+        code: 'NETWORK',
+      });
+      throw new Error('Erreur reseau');
+    }
 
     if (response.status === 401) {
       logout();
+      showError({
+        title: 'Session expiree',
+        message: 'Votre session n est plus valide. Merci de vous reconnecter.',
+        code: '401',
+      });
       throw new Error('Session expirée');
     }
 
     if (!response.ok) {
+      showError({
+        title: 'Erreur serveur',
+        message: `La requete a echoue avec le statut ${response.status}.`,
+        code: String(response.status),
+      });
       throw new Error(`Erreur HTTP ${response.status}`);
     }
 
     return response;
-  }, [apiUrl, logout, token]);
+  }, [apiUrl, logout, showError, token]);
 
   const get = useCallback(async <T,>(path: string, init: RequestInit = {}) => {
     const response = await request(path, init);

@@ -16,10 +16,10 @@ export async function fetchChartBPM(
     const startDateBPMApiString = formatApiDate(startDateBPM);
     const endDateBPMApiString = formatApiDate(endDateBPM);
 
-    console.log('[DEBUG-FETCH-BPM] Fetching BPM data with:', {
-        startDateBPM: startDateBPMApiString,
-        endDateBPM: endDateBPMApiString,
-    });
+    //console.log('[DEBUG-FETCH-BPM] Fetching BPM data with:', {
+    //    startDateBPM: startDateBPMApiString,
+    //    endDateBPM: endDateBPMApiString,
+    //});
     const data = await get<UserActivityRawHR[]>(`/user-activity?startWeek=${startDateBPMApiString}&endWeek=${endDateBPMApiString}`);
 
     if (!Array.isArray(data)) {
@@ -28,10 +28,10 @@ export async function fetchChartBPM(
         throw new Error('Données reçues ne contiennent pas de champ date');
     }
 
-    console.log('[DEBUG-FETCH-BPM]', {
-        startDateBPM: startDateBPMApiString,
-        endDateBPM: endDateBPMApiString,
-        receivedData: data,
-    });
+    //console.log('[DEBUG-FETCH-BPM]', {
+    //    startDateBPM: startDateBPMApiString,
+    //    endDateBPM: endDateBPMApiString,
+    //    receivedData: data,
+    //});
     return data;
 }

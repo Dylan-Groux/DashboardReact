@@ -6,6 +6,7 @@ import { fetchChartKilometres } from '@api/FetchChartKilometres/fecthChartKilome
 import { mapUserActivity } from '@api/Mapping/UserActivity';
 import type { UserActivity, UserActivityRawKm } from '@api/Mapping/types/UserActivityTypes';
 import { useApiClient } from '../../../context/ApiClientContext';
+import { useError } from '../../../context/ErrorContext';
 
 type KilometresPerformanceSectionProps = {
   startDate: Date;
@@ -21,6 +22,7 @@ const KilometresPerformanceSection: React.FC<KilometresPerformanceSectionProps> 
   setStartDate,
 }) => {
   const { get, hasToken } = useApiClient();
+  const { showError } = useError();
   const [chartData, setChartData] = useState<UserActivity[]>([]);
 
   const totalKm = chartData.reduce((sum, item) => sum + (item.uv ?? 0), 0);
@@ -34,8 +36,14 @@ const KilometresPerformanceSection: React.FC<KilometresPerformanceSectionProps> 
         const mapped = mapUserActivity('kilometres', rawData, startDate, endDate);
         setChartData(mapped);
       })
-      .catch(err => console.error(err));
-  }, [endDate, get, hasToken, startDate]);
+      .catch(() => {
+        showError({
+          title: 'Erreur de chargement',
+          message: 'Impossible de charger les performances kilometres pour la periode selectionnee.',
+          code: 'KM_FETCH',
+        });
+      });
+  }, [endDate, get, hasToken, showError, startDate]);
 
   if (!hasToken) {
     return null;

@@ -1,10 +1,9 @@
 import { useLogin } from '../UseLogin';
 import './LoginForm.css'
 import '../LoginPage/LoginPage.css'
-import ErrorPopUp from '../../Error';
 
 const LoginForm = () => {
-    const { email, setEmail, password, setPassword, error, handleSubmit } = useLogin();
+    const { email, setEmail, password, setPassword, handleSubmit } = useLogin();
 
     return (
         <form className='login-form' onSubmit={handleSubmit}>
@@ -27,7 +26,6 @@ const LoginForm = () => {
                 />
             </div>
             <button type="submit">Se connecter</button>
-            {error && <ErrorPopUp message={error} />}
         </form>
     )
 }

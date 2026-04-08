@@ -1,5 +1,6 @@
 
 import type { ApiClientType } from "../../context/ApiClientContext";
+import { formatApiDate } from "../../utils/NormalizeDate";
 
  /* @type UserInformation
  * @description Représente la réponse API concernant les informations d'un utilisateur, incluant son profil et ses statistiques d'activité.
@@ -29,5 +30,8 @@ export async function getUserActivities(
     startDate: Date,
     endDate: Date,
 ): Promise<UserActivities[]> {
-    return get<UserActivities[]>(`/user-activity?startWeek=${startDate.toISOString()}&endWeek=${endDate.toISOString()}`);
+    const startWeek = formatApiDate(startDate);
+    const endWeek = formatApiDate(endDate);
+
+    return get<UserActivities[]>(`/user-activity?startWeek=${startWeek}&endWeek=${endWeek}`);
 }

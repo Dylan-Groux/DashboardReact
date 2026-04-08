@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApiClient } from '../../../context/ApiClientContext';
 import { useAuth } from '../../../context/AuthContext';
+import { useError } from '../../../context/ErrorContext';
 
 type LoginResponse = {
   token: string;
@@ -11,14 +12,13 @@ type LoginResponse = {
 export const useLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const navigate = useNavigate();
   const api = useApiClient();
   const { setAuthSession } = useAuth();
+  const { showError } = useError();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
 
     try {
       const sanitizedData = sanitizeFormData({ username: email, password });
@@ -34,7 +34,12 @@ export const useLogin = () => {
       });
       navigate(`/dashboard/${data.userId}`); // Redirige vers le dashboard
     } catch (err) {
-      setError('Erreur serveur');
+      const message = err instanceof Error ? err.message : 'Erreur serveur';
+      showError({
+        title: 'Connexion impossible',
+        message,
+        code: 'LOGIN',
+      });
     }
   };
 
@@ -43,7 +48,6 @@ export const useLogin = () => {
     setEmail,
     password,
     setPassword,
-    error,
     handleSubmit,
   };
 };
@@ -53,7 +57,7 @@ const sanitizeFormData = (data: {username : string, password : string }) => {
     const password = data.password.trim();
     
     if (password.length < 8 || !/[a-z]/.test(password) || !/[0-9]/.test(password)) {
-        throw new Error('Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre');
+        throw new Error('Le mot de passe doit contenir au moins 8 caracteres, une minuscule et un chiffre.');
     }
     
     return { username, password };

@@ -7,6 +7,7 @@ import type { UserActivity, UserActivityRawHebdo } from '@api/Mapping/types/User
 import { useActivitiesDuration } from '../../../hooks/User/Activities/useActivitiesDuration';
 import { useActivitiesKm } from '../../../hooks/User/Activities/useActivitiesKm';
 import { useApiClient } from '../../../context/ApiClientContext';
+import { useError } from '../../../context/ErrorContext';
 
 type HebdoPerformanceSectionProps = {
     startDateBPM: Date;
@@ -15,6 +16,7 @@ type HebdoPerformanceSectionProps = {
 
 const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ startDateBPM, endDateBPM }) => {
   const { get, hasToken } = useApiClient();
+  const { showError } = useError();
     const [ChartData, setChartData] = useState<UserActivity[]>([]);
     const objectifHebdo = 6;
     const totalHebdoActivties = ChartData.reduce((sum, item) => sum + (item.pointdayactivity ?? 0), 0);
@@ -29,8 +31,14 @@ const HebdoPerformanceSection: React.FC<HebdoPerformanceSectionProps> = ({ start
                 const mapped = mapUserActivity('hebdo', rawData, startDateBPM, endDateBPM);
                 setChartData(mapped);
             })
-            .catch(err => console.error(err));
-    }, [endDateBPM, get, hasToken, startDateBPM]);
+            .catch(() => {
+              showError({
+                title: 'Erreur de chargement',
+                message: 'Impossible de charger les statistiques hebdomadaires.',
+                code: 'HEBDO_FETCH',
+              });
+            });
+        }, [endDateBPM, get, hasToken, showError, startDateBPM]);
 
     if (!hasToken) {
         return null;

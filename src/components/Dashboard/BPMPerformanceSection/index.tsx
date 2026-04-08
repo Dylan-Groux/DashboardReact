@@ -6,6 +6,7 @@ import { fetchChartBPM } from '@api/FetchChartBPM/FetchChartBPM';
 import { mapUserActivity } from '@api/Mapping/UserActivity';
 import type { UserActivity, UserActivityRawHR } from '@api/Mapping/types/UserActivityTypes';
 import { useApiClient } from '../../../context/ApiClientContext';
+import { useError } from '../../../context/ErrorContext';
 
 type BPMPerformanceSectionProps = {
   startDateBPM: Date;
@@ -21,6 +22,7 @@ const BPMPerformanceSection: React.FC<BPMPerformanceSectionProps> = ({
   setStartDateBPM,
 }) => {
   const { get, hasToken } = useApiClient();
+  const { showError } = useError();
   const [chartBPMData, setChartBPMData] = useState<UserActivity[]>([]);
 
   const bpmValues = chartBPMData
@@ -39,8 +41,14 @@ const BPMPerformanceSection: React.FC<BPMPerformanceSectionProps> = ({
         const mapped = mapUserActivity('bpm', rawData, startDateBPM, endDateBPM);
         setChartBPMData(mapped);
       })
-      .catch(err => console.error(err));
-  }, [endDateBPM, get, hasToken, startDateBPM]);
+      .catch(() => {
+        showError({
+          title: 'Erreur de chargement',
+          message: 'Impossible de charger les donnees BPM pour la semaine selectionnee.',
+          code: 'BPM_FETCH',
+        });
+      });
+  }, [endDateBPM, get, hasToken, showError, startDateBPM]);
 
   if (!hasToken) {
     return null;

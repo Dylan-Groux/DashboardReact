@@ -9,16 +9,21 @@ import { UserProvider } from './context/UserContext';
 import AuthGuard from './components/Guard';
 import { ApiUrlContext } from './context/ApiUrlContext';
 import Profile from './Profile';
+import { ErrorProvider } from './context/ErrorContext';
+import ErrorPage from './components/ErrorPage';
+import NotFoundRedirect from './components/ErrorPage/NotFoundRedirect';
 
 function App() {
   return (
     <ApiUrlContext.Provider value={import.meta.env.VITE_API_URL}>
       <AuthProvider>
-        <ApiClientProvider>
-          <UserProvider>
-            <BrowserRouter>
+        <BrowserRouter>
+          <ErrorProvider>
+            <ApiClientProvider>
+              <UserProvider>
               <Routes>
                 <Route path="/" element={<Login />} />
+                <Route path="/error" element={<ErrorPage />} />
                 <Route element={<AuthGuard />}>
                 <Route path="/dashboard/:id" element={<Dashboard />} />
                 <Route path="/profil/:id" element={<Profile />} />
@@ -29,10 +34,12 @@ function App() {
                 <Route path="/contact" element={"TODO : Contact"} />
                 <Route path="/logout" element={<Logout />} />
                 </Route>
+                <Route path="*" element={<NotFoundRedirect />} />
               </Routes>
-            </BrowserRouter>
-          </UserProvider>
-        </ApiClientProvider>
+              </UserProvider>
+            </ApiClientProvider>
+          </ErrorProvider>
+        </BrowserRouter>
       </AuthProvider>
     </ApiUrlContext.Provider>
   );
