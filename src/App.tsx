@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import Login from './Login';
 import './App.css'
 import Dashboard from './Dashboard';
@@ -13,6 +13,16 @@ import { ErrorProvider } from './context/ErrorContext';
 import ErrorPage from './components/ErrorPage';
 import NotFoundRedirect from './components/ErrorPage/NotFoundRedirect';
 
+const ProtectedApp = () => {
+  return (
+    <AuthGuard>
+      <UserProvider>
+        <Outlet />
+      </UserProvider>
+    </AuthGuard>
+  );
+};
+
 function App() {
   return (
     <ApiUrlContext.Provider value={import.meta.env.VITE_API_URL}>
@@ -20,23 +30,18 @@ function App() {
         <BrowserRouter>
           <ErrorProvider>
             <ApiClientProvider>
-              <UserProvider>
               <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/error" element={<ErrorPage />} />
-                <Route element={<AuthGuard />}>
-                <Route path="/dashboard/:id" element={<Dashboard />} />
-                <Route path="/profil/:id" element={<Profile />} />
-                {/* Route à certainement rajouter même si non présent dans la maquette */}
-                <Route path="/register" element={"TODO : Register"} />
-                <Route path="/forgot-password" element={"TODO : Mot de passe oublié"} />
-                <Route path="/terms" element={"TODO : CGU"} />
-                <Route path="/contact" element={"TODO : Contact"} />
-                <Route path="/logout" element={<Logout />} />
+
+                <Route element={<ProtectedApp />}>
+                  <Route path="/dashboard/:id" element={<Dashboard />} />
+                  <Route path="/profil/:id" element={<Profile />} />
+                  <Route path="/logout" element={<Logout />} />
                 </Route>
+
                 <Route path="*" element={<NotFoundRedirect />} />
               </Routes>
-              </UserProvider>
             </ApiClientProvider>
           </ErrorProvider>
         </BrowserRouter>

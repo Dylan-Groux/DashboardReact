@@ -1,125 +1,192 @@
-# 📊 Dashboard React — Fonctionnalités & Architecture
+# Sportsee
 
-## Fonctionnalités principales
+Application front-end React dédiée à l'authentification utilisateur, à la consultation d'un profil protégé et à la visualisation de données de performance via des graphiques métier.
 
-- Authentification utilisateur (login/logout)
-- Gestion du token et de l'userId (stockés en mémoire, non persistants)
-- Récupération et affichage dynamique des informations utilisateur (profil, statistiques, etc.)
-- Navigation protégée (redirection automatique vers la page de login si non authentifié)
-- Visualisation de performances (graphiques, statistiques, etc.)
-- Sélection de période (DateNavigator) pour filtrer les données affichées
+Le projet repose sur une architecture simple et explicite autour de React, TypeScript, Vite et de plusieurs contextes applicatifs pour l'authentification, l'accès API, la gestion des erreurs et l'exposition des données utilisateur.
 
-## Architecture des contextes
+## Objectif du projet
 
-### AuthContext
-- Fournit : email, password, token, userId, login, logout, isLoading
-- login : effectue l'appel API, stocke le token/userId, gère l'état de chargement
-- logout : réinitialise tous les états
-- isLoading : indique si une authentification est en cours (utile pour loader ou blocage navigation)
-- Le token N'EST PAS persistant (perdu au refresh)
+L'application permet de :
 
-### UserContext
-- Fournit : userInformation (profil complet), memberDate (date d'inscription formatée)
-- Récupère automatiquement les infos utilisateur dès que le token change
-- Expose memberDate déjà formatée pour affichage direct
+- authentifier un utilisateur via une API externe ;
+- protéger les écrans sensibles tant qu'aucune session n'est active ;
+- récupérer et agréger les données utilisateur côté front ;
+- afficher des indicateurs de performance dans plusieurs composants graphiques ;
+- filtrer les données affichées selon une période sélectionnée.
 
-## Navigation & Sécurité
+## Stack technique
 
-- Utilisation d'un composant RequireAuth pour protéger les routes sensibles
-- Si l'utilisateur n'est pas authentifié (token null), il est redirigé vers la page de login
-- Utilisation d'un parent <Route element={<RequireAuth><Outlet /></RequireAuth>}> pour éviter la duplication
+- React 19
+- TypeScript 5
+- Vite 7
+- React Router 7
+- Recharts 3
+- Jest pour les tests
+- ESLint pour l'analyse statique
+- Docker / Docker Compose pour l'exécution en environnement conteneurisé
 
-## Loader & UX
+## Fonctionnalités couvertes
 
-- Un loader (ou rien) est affiché tant que l'authentification est en cours (isLoading)
-- Pas de loader visible si la connexion est très rapide (comportement par défaut)
+- authentification et fermeture de session ;
+- stockage de la session en mémoire uniquement ;
+- routage protégé vers le dashboard et le profil ;
+- récupération des informations de profil et des statistiques utilisateur ;
+- gestion centralisée des erreurs applicatives ;
+- affichage de graphiques BPM, hebdomadaires et kilométriques ;
+- sélection de plage de dates pour piloter les vues de performance.
 
-## Choix techniques
+## Architecture applicative
 
-- Pas de persistance du token : l'utilisateur doit se reconnecter après un refresh (choix volontaire)
-- Utilisation de contextes React pour le state global (pas de Redux, pas de localStorage)
-- Formatage des dates et des données utilisateur centralisé dans UserContext
-- Les graphiques affichent toujours la dernière période complète (pas de semaine en cours)
+Le point d'entrée de l'application compose plusieurs providers globaux autour du routeur :
 
-## Conseils pour la reprise du projet
+- `ApiUrlContext` injecte l'URL de l'API via `VITE_API_URL` ;
+- `AuthProvider` maintient `email`, `token`, `userId` et `isLoading` ;
+- `ErrorProvider` centralise les erreurs et la navigation vers l'écran dédié ;
+- `ApiClientProvider` encapsule les appels réseau authentifiés ;
+- `UserProvider` expose les données métier utilisateur au reste de l'interface.
 
-- Pour ajouter une nouvelle info utilisateur, enrichis UserContext et consomme-la via useUser()
-- Pour protéger une nouvelle route, ajoute-la comme enfant du parent RequireAuth dans App.tsx
-- Pour modifier le comportement d'auth, adapte AuthContext (ex : persistance, refresh token, etc.)
+### Authentification
 
----
+- La session est conservée en mémoire uniquement.
+- Aucun token n'est persisté dans le navigateur.
+- Un rafraîchissement de page réinitialise donc l'état d'authentification.
+- Le mot de passe ne fait pas partie d'un stockage persistant côté front.
 
-Ce README a été mis à jour pour servir de bloc-notes et de guide rapide sur l'architecture et les choix du projet. Relis-le avant de reprendre le code pour gagner du temps !
-# React + TypeScript + Vite
+### Données utilisateur
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Le `UserContext` s'appuie sur les hooks métier pour exposer deux blocs principaux :
 
-Currently, two official plugins are available:
+- `userProfile` pour les informations de profil ;
+- `userStatistics` pour les statistiques utilisées par les vues dashboard.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Gestion des erreurs
 
-## React Compiler
+Le projet suit une approche centralisée :
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- les erreurs globales transitent par `ErrorContext` ;
+- les erreurs réseau ou HTTP peuvent être remontées via le client API ;
+- une route dédiée `/error` sert de point de chute applicatif ;
+- les routes inconnues sont redirigées vers un comportement 404 via `NotFoundRedirect`.
 
-## Expanding the ESLint configuration
+### Gestion des périodes
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+La logique de période du dashboard utilise des bornes locales inclusives. Pour les plages hebdomadaires, les dates envoyées à l'API doivent rester sérialisées au format `YYYY-MM-DD` afin d'éviter les décalages UTC sur le dimanche.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Routage
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Les routes actuellement exposées sont :
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- `/` : page de connexion ;
+- `/error` : page d'erreur globale ;
+- `/dashboard/:id` : dashboard protégé ;
+- `/profil/:id` : profil protégé ;
+- `/logout` : fermeture de session ;
+- `*` : redirection de type 404.
+
+Les routes protégées sont encapsulées dans un garde d'authentification afin d'éviter la duplication de logique et de garantir la présence d'une session valide avant affichage.
+
+## Structure du projet
+
+```text
+src/
+  api/              Clients de récupération et mapping des données
+  components/       Composants d'interface et sections du dashboard
+  context/          Contextes globaux de l'application
+  hooks/            Hooks métier et hooks de tests
+  utils/            Fonctions utilitaires transverses
+  Dashboard/        Entrée fonctionnelle du dashboard
+  Login/            Entrée fonctionnelle de la page de connexion
+  Logout/           Gestion de déconnexion
+  Profile/          Entrée fonctionnelle de la page profil
+docs/               Documentation technique complémentaire
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Prérequis
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Node.js 20 ou version compatible récente ;
+- npm ;
+- facultatif : Docker et Docker Compose.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Installation
+
+```bash
+npm install
 ```
+
+## Configuration
+
+L'application attend une variable d'environnement Vite pour cibler l'API :
+
+```bash
+VITE_API_URL=http://localhost:3000
+```
+
+Tu peux la définir dans un fichier `.env` local ou via ton environnement d'exécution.
+
+## Lancement en local
+
+```bash
+npm run dev
+```
+
+Le serveur de développement Vite est exposé par défaut sur le port `5173`.
+
+## Lancement avec Docker
+
+```bash
+docker compose up --build
+```
+
+Le service `frontend` :
+
+- construit l'image depuis `Dockerfile.dev` ;
+- monte le projet dans `/app` ;
+- expose le port `5173` ;
+- démarre Vite en mode développement avec `--host 0.0.0.0`.
+
+## Scripts disponibles
+
+```bash
+npm run dev
+npm run build
+npm run lint
+npm run preview
+npm run test
+```
+
+### Détail
+
+- `npm run dev` : démarre le serveur de développement ;
+- `npm run build` : compile TypeScript puis génère le build Vite ;
+- `npm run lint` : exécute ESLint sur le projet ;
+- `npm run preview` : sert localement le build de production ;
+- `npm run test` : lance la suite Jest.
+
+## Conventions et choix techniques
+
+- Architecture orientée contextes plutôt que store global externe.
+- Session volontairement non persistée.
+- Appels API centralisés via le client injecté dans le contexte.
+- Gestion d'erreurs globales plutôt que traitement dispersé dans les composants.
+- Composants de visualisation organisés par domaine métier du dashboard.
+
+## Reprise et évolution du projet
+
+Pour faire évoluer le projet proprement :
+
+- ajoute les nouvelles données utilisateur au niveau des hooks métier puis expose-les via `UserContext` ;
+- ajoute toute nouvelle route protégée dans l'arbre encapsulé par le garde d'authentification ;
+- conserve la remontée des erreurs globales via `ErrorContext` ;
+- respecte le format local `YYYY-MM-DD` pour les dates transmises à l'API sur les vues hebdomadaires.
+
+## Documentation complémentaire
+
+Le dossier `docs/` contient des notes ciblées sur certaines briques métier, notamment :
+
+- l'authentification et le store des fetchs ;
+- la navigation par dates ;
+- la stratégie de gestion d'erreur.
+
+## État actuel
+
+Le projet est prêt pour un usage de développement local et une reprise technique rapide. Le README a vocation à servir de référence d'onboarding, de rappel d'architecture et de guide d'exécution.

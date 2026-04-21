@@ -1,7 +1,12 @@
+import type { ReactNode } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const AuthGuard: React.FC = () => {
+type AuthGuardProps = {
+  children?: ReactNode;
+};
+
+const AuthGuard = ({ children }: AuthGuardProps) => {
   const { token, isLoading } = useAuth();
 
   if (isLoading) {
@@ -12,7 +17,7 @@ const AuthGuard: React.FC = () => {
     return <Navigate to="/" replace />;
   }
 
-  return <Outlet />;
+  return children ?? <Outlet />;
 };
 
 export default AuthGuard;
